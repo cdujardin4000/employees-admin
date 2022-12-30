@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DeptEmp index{% endblock %}
+
+{% block body %}
+    <h1>DeptEmp index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Emp_no</th>
+                <th>Dept_no</th>
+                <th>From_date</th>
+                <th>To_date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for dept_emp in dept_emps %}
+            <tr>
+                <td>{{ dept_emp.empNo }}</td>
+                <td>{{ dept_emp.deptNo }}</td>
+                <td>{{ dept_emp.fromDate ? dept_emp.fromDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ dept_emp.toDate ? dept_emp.toDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_dept_emp_show', {'emp_no': dept_emp.emp_no}) }}">show</a>
+                    <a href="{{ path('app_dept_emp_edit', {'emp_no': dept_emp.emp_no}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dept_emp_new') }}">Create new</a>
+{% endblock %}

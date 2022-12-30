@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salary index{% endblock %}
+
+{% block body %}
+    <h1>Salary index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Emp_no</th>
+                <th>Salary</th>
+                <th>From_date</th>
+                <th>To_date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for salary in salaries %}
+            <tr>
+                <td>{{ salary.id }}</td>
+                <td>{{ salary.empNo }}</td>
+                <td>{{ salary.salary }}</td>
+                <td>{{ salary.fromDate ? salary.fromDate|date('Y-m-d') : '' }}</td>
+                <td>{{ salary.toDate ? salary.toDate|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_salary_show', {'id': salary.id}) }}">show</a>
+                    <a href="{{ path('app_salary_edit', {'id': salary.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_salary_new') }}">Create new</a>
+{% endblock %}

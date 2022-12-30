@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee index{% endblock %}
+
+{% block body %}
+    <h1>Employee index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First_name</th>
+                <th>Last_name</th>
+                {# #}<th>Actual Affectation</th>
+                <th>Birth_date</th>
+                <th>Gender</th>
+                <th>Photo</th>
+                <th>Email</th>
+                <th>Affectations</th>
+                <th>Hire_date</th>
+                <th>Roles</th>
+                <th>IsVerified</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for employee in employees %}
+            <tr>
+                <td>{{ employee.id }}</td>
+                <td>{{ employee.firstName }}</td>
+                <td>{{ employee.lastName }}</td>
+                 <td>
+                    {% for affectation in employee.affectations %}
+                        <p>{{ affectation.getToDate == date('9999-01-01') ? affectation : '' }} </p>
+                    {% endfor %}
+                </td>{# #}
+                <td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
+                <td>{{ employee.gender }}</td>
+                <td>{{ employee.photo }}</td>
+                <td>{{ employee.email }}</td>
+                <td>
+                    {% for affectation in employee.departments %}
+                    <p>{{ affectation }} </p>
+                    {% endfor %}
+                </td>
+                <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
+                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
+                <td>{{ employee.isVerified ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_employee_show', {'id': employee.id}) }}">show</a>
+                    <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_employee_new') }}">Create new</a>
+{% endblock %}

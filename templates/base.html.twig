@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+    <header>
+        <div class="px-3 py-2 text-bg-dark">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                    </a>
+
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                        <li>
+                            <a href="#" class="nav-link text-secondary">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
+                                Home
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_USER') %}
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
+                                Member
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
+                                Departments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
+                                Women at work
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
+                                Partners
+                            </a>
+                        </li>
+                        <li>
+                        {% if is_granted('ROLE_USER') %}
+                        <li>
+                            <a href="{{ path('app_admin') }}" class="nav-link text-white">
+                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                                Admin
+                             </a>
+                        </li>
+                         {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% if app.request.get('_route') != 'app_login' and app.request.get('_route') != 'app_register' and app.request.get('_route') != 'app_loginadmin' %}
+        <div class="px-3 py-2 border-bottom mb-3">
+            <div class="container d-flex flex-wrap  space-between">
+                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                </form>
+                {% if app.user %}
+                    <div class="mb-3">
+                        <p>You are logged in as {{ app.user.userIdentifier }}, your role is: {{ app.user.roles[0] }}, <a href="{{ path('app_logout') }}">Logout</a></p>
+                    </div>
+                {% else %}
+                <div class="text-end">
+                    <a type="button" class="btn btn-light text-dark me-2" href="{{ path('app_login') }}">Login</a>
+                    <a type="button" class="btn btn-primary" href="{{ path('app_register') }}">Sign-up</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </header>
+
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+
+    <footer class="py-5 text-bg-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Section</h5>
+                    <ul class="nav flex-column text-white">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Section</h5>
+                    <ul class="nav flex-column text-white">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-2 mb-3">
+                    <h5>Section</h5>
+                    <ul class="nav flex-column text-white">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Home</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Features</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">FAQs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-5 offset-md-1 mb-3  text-white">
+                    <form>
+                        <h5>Subscribe to our newsletter</h5>
+                        <p>Monthly digest of what's new and exciting from us.</p>
+                        <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                            <label for="newsletter1" class="visually-hidden">Email address</label>
+                            <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
+                            <button class="btn btn-primary" type="button">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+                <p>&copy; 2022 Company, Inc. All rights reserved.</p>
+                <ul class="list-unstyled d-flex">
+                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
+                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    </body>
+</html>

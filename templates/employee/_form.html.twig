@@ -1,0 +1,13 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.first_name) }}</div>
+        <div class="col-md-6">{{ form_row(form.last_name) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.birth_date) }}</div>
+        <div class="col-md-6">{{ form_row(form.hire_date) }}</div>
+    </div>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn" type="submit">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

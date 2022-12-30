@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DeptEmp{% endblock %}
+
+{% block body %}
+    <h1>To wish department do you want to affect your new employee?</h1>
+
+    {{ include('dept_emp/_form.html.twig') }}
+
+    <a href="{{ path('app_dept_emp_index') }}">back to list</a>
+{% endblock %}

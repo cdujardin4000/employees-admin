@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demand{% endblock %}
+
+{% block body %}
+    <h1>Demand</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ demand.id }}</td>
+            </tr>
+            <tr>
+                <th>Employee</th>
+                <td>{{ demand.employee }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ demand.type }}</td>
+            </tr>
+            <tr>
+                <th>About</th>
+                <td>{{ demand.about }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ demand.status is null ? 'In review' : demand.status == 1 ? 'Accepted' : 'Rejected' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_demand_index') }}">back to list</a>
+
+    <a href="{{ path('app_demand_edit', {'id': demand.id}) }}">edit</a>
+
+    {{ include('demand/_delete_form.html.twig') }}
+{% endblock %}
