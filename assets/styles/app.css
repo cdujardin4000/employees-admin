@@ -1,39 +1,20 @@
 /*
-Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.
-        on line 4 of ../easyadmin-bundle/assets/css/app.scss
-        from line 2 of app.scss
+Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.scss.
+        on line 1 of app.scss
 
-1: 
-2: @import "../easyadmin-bundle/assets/css/app.scss";
-3: /**
-4: Bootstrap
-5:  *\/
-6: 
-7: @import "~bootstrap/scss/bootstrap.scss";
-8: 
-9: 
+1: @import "~bootstrap/scss/bootstrap.scss";
+2: 
+3: @import "variables";
+4: 
+5: @import "custom";
 
 Backtrace:
-../easyadmin-bundle/assets/css/app.scss:4
-app.scss:2
+app.scss:1
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/import_node.rb:67:in `rescue in import'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/import_node.rb:44:in `import'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/import_node.rb:28:in `imported_file'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/import_node.rb:37:in `css_import?'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:310:in `visit_import'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:36:in `visit'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `block in with_base'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:135:in `with_frame'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `with_base'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `visit'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:325:in `block (2 levels) in visit_import'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:325:in `map'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:325:in `block in visit_import'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:88:in `block in with_import'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:135:in `with_frame'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:88:in `with_import'
-C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:322:in `visit_import'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/base.rb:36:in `visit'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
 C:/Ruby30-x64/lib/ruby/gems/3.0.0/gems/sass-3.7.4/lib/sass/stack.rb:79:in `block in with_base'
@@ -66,4 +47,4 @@ C:/Ruby30-x64/bin/sass:23:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.\A         on line 4 of ../easyadmin-bundle/assets/css/app.scss\A         from line 2 of app.scss\A \A 1: \A 2: @import \"../easyadmin-bundle/assets/css/app.scss\";\A 3: /**\A 4: Bootstrap\A 5:  */\A 6: \A 7: @import \"~bootstrap/scss/bootstrap.scss\";\A 8: \A 9: "; }
+  content: "Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.scss.\A         on line 1 of app.scss\A \A 1: @import \"~bootstrap/scss/bootstrap.scss\";\A 2: \A 3: @import \"variables\";\A 4: \A 5: @import \"custom\";"; }
