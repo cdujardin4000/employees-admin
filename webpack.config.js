@@ -13,13 +13,14 @@ Encore
     .setPublicPath('/build')
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
-
+    .cleanupOutputBeforeBuild()
     /*
      * ENTRY CONFIG
      *
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
      */
+    .addEntry('bootstrap', './assets/bootstrap-5.3.0-alpha1/scss/bootstrap.scss')
     .addEntry('css', './assets/styles/app.scss' )
     .addEntry('app', './assets/app.js')
 
@@ -34,7 +35,7 @@ Encore
 
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
+    //.splitEntryChunks()
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app

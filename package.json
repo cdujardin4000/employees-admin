@@ -8,6 +8,7 @@
     "core-js": "^3.27.0",
     "dirty-form": "^0.4.0",
     "font-awesome": "^4.7.0",
+    "postcss": "^8.4.20",
     "postcss-loader": "^7.0.2",
     "webpack-rtl-plugin": "^2.0.0"
   },
