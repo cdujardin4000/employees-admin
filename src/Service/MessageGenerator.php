@@ -13,9 +13,9 @@ class MessageGenerator
         $this->logger = $logger;
     }
 
-    public function getHappyMessage(): string
+    public function getNewArrivalMessage(): string
     {
-        $this->logger->info('About to find a happy message!');
+        $this->logger->info('New recruit for your team!');
         // ...
     }
 }

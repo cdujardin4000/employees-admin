@@ -18,15 +18,18 @@ class NewEmpService
         $this->mailer = $mailer;
     }
 
-    public function notifyOfSiteUpdate(): bool
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function notifyNewArrival(): bool
     {
-        $happyMessage = $this->messageGenerator->getHappyMessage();
+        $newArrivalMessage = $this->messageGenerator->getNewArrivalMessage();
 
         $email = (new Email())
             ->from('admin@example.com')
             ->to('manager@example.com')
-            ->subject('Site update just happened!')
-            ->text('Someone just updated the site. We told them: '.$happyMessage);
+            ->subject('New teammates arrival!')
+            ->text('Someone just joined your department: '.$newArrivalMessage);
 
         $this->mailer->send($email);
 

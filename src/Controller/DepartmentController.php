@@ -34,7 +34,7 @@ class DepartmentController extends AbstractController
             return $this->redirectToRoute('app_department_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('department/new.html.twig', [
+        return $this->render('department/new.html.twig', [
             'department' => $department,
             'form' => $form,
         ]);

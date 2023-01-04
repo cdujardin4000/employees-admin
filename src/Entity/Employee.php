@@ -22,7 +22,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue()]
-    #[ORM\Column(name: '`emp_no`', type: 'integer')]
+    #[ORM\Column(name: 'emp_no', type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 14)]
@@ -41,13 +41,16 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
+
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?DateTimeInterface $hire_date = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
     /**
      * @var string The hashed password
@@ -107,11 +110,19 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 **/
-
+    public function get_emp_no(): ?int
+    {
+        return $this->id;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function getFirstName(): ?string
@@ -170,6 +181,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }
@@ -245,7 +268,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';     //dump($roles);die;
 
-        return array_unique($roles);
+        return array_unique($roles, SORT_STRING);
     }
 
     public function setRoles(array $roles): self

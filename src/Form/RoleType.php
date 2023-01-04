@@ -11,9 +11,10 @@ class RoleType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => [
-                'USER' => 'ROLE_USER',
-                'ADMIN' => 'ROLE_ADMIN',
+                'EMPLOYEE' => 'ROLE_EMPLOYEE',
                 'MANAGER' => 'ROLE_MANAGER',
+                'ADMIN' => 'ROLE_ADMIN',
+                'SUPER ADMIN' => 'ROLE_SUPER_ADMIN',
             ],
             'placeholder' => 'Choose an option',
             'attr' => [

@@ -3,8 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Employee;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @extends ServiceEntityRepository<Employee>
@@ -14,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Employee[]    findAll()
  * @method Employee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmployeeRepository extends ServiceEntityRepository
+class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -43,7 +48,21 @@ class EmployeeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * Used to upgrade (rehash) the user's password automatically over time.
+     */
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof Employee) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+        }
+
+        $user->setPassword($newHashedPassword);
+
+        $this->save($user, true);
+    }
+
+    /**
+     * @throws Exception
      */
     public function findLatest(): int
     {
@@ -60,7 +79,61 @@ class EmployeeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
+     */
+    public function findVeterans(): array
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT `emp_no`, `hire_date`, `first_name`, `last_name` FROM `employees` ORDER BY `hire_date` ASC LIMIT 10";
+
+        //dd($resultSet->fetchOne());
+        return $conn->executeQuery($sql)->fetchAllAssociative();
+        // returns an array of arrays (i.e. a raw data set)
+
+    }
+
+    /**
+     * @throws Exception
+
+    public function getNbEmployeeByGender(): array
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "select ps_area
+                , count( case when ps_gender='M'
+                then 1 end ) as Male
+                , count( case when ps_gender='F'
+                then 1 end ) as Female
+                FROM `employees` OGROUP BY `ps_area`";
+
+        //dd($resultSet->fetchOne());
+        return $conn->executeQuery($sql)->fetchAllAssociative();
+        // returns an array of arrays (i.e. a raw data set)
+
+    }*/
+
+    /**
+     * @throws Exception
+     */
+    public function findArrivals(): array
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT `emp_no`, `hire_date`, `first_name`, `last_name` FROM `employees` ORDER BY `hire_date` DESC LIMIT 10";
+
+        //dd($resultSet->fetchOne());
+        return $conn->executeQuery($sql)->fetchAllAssociative();
+        // returns an array of arrays (i.e. a raw data set)
+
+    }
+
+
+    /**
+     * @throws Exception
      */
     public function getActualDepartment() : string
     {

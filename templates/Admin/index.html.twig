@@ -1,0 +1,33 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_title %}
+    Last Numbers from Encore CORPS
+{% endblock %}
+{% block main %}
+    <div class="row">
+        <h3>Test charts</h3>
+        <div class="col-12">
+            {{ render_chart(chart) }}
+        </div>
+        <div class="col-6">
+            <h3>Latest Arrivals</h3>
+            <ol>
+                {% for arrival in arrivals %}
+                    <li>
+
+                        <a href="{{ path('app_employee_show', {'id': arrival.emp_no }) }}"> {{ arrival.first_name }} {{ arrival.last_name }}</a>- {{ arrival.hire_date|date('Y-m-d') }}
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-6">
+            <h3>Our Veterans</h3>
+            <ol>
+                {% for veteran in veterans %}
+                    <li>
+                        <a href="{{ path('app_employee_show', {'id': veteran.emp_no }) }}">{{ veteran.first_name }} {{ veteran.last_name }}</a>- {{ veteran.hire_date|date('Y-m-d') }}
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+{% endblock %}

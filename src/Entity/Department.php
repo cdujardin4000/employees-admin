@@ -52,7 +52,7 @@ class Department
         //$this->mutations = new ArrayCollection();
     }
 
-    public function getId(): ?string
+    public function getDeptNo(): ?string
     {
         return $this->dept_no;
     }
@@ -130,6 +130,9 @@ class Department
 
         return $this;
     }**/
+
+
+
     public function __toString() :string {
         return (string)$this->dept_name;
     }

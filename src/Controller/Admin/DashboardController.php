@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 
+use App\Controller\DemandController;
 use App\Entity\Demand;
 use App\Entity\User;
 use App\Entity\Department;
 use App\Entity\Employee;
+use App\Repository\EmployeeRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -16,58 +18,167 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
+    private EmployeeRepository $employeeRepository;
+    private ChartBuilderInterface $chartBuilder;
+    public function __construct(EmployeeRepository $employeeRepository, ChartBuilderInterface $chartBuilder)
+    {
+
+        $this->chartbuilder = $chartBuilder;
+        $this->employeeRepository = $employeeRepository;
+    }
+
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Doctrine\DBAL\Exception
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'app_admin')]
-    public function index(): Response
+    public function index(ChartBuilderInterface $chartBuilder = null): Response
     {
+        assert(null !== $chartBuilder);
+        $veterans = $this->employeeRepository->findVeterans();
+        $arrivals = $this->employeeRepository->findArrivals();
+
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
+
         $url = $routeBuilder->setController(EmployeeCrudController::class)->generateUrl();
 
-        return $this->redirect($url);
+        return $this->render('admin/index.html.twig', [
+            'veterans' => $veterans,
+            'arrivals' => $arrivals,
+            'chart' => $this->createChart($chartBuilder),
+        ]);
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Welcome to Encore');
+            ->setTitle('Welcome to Encore CORPS');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fas fa-dashboard');
-        yield MenuItem::linktoUrl('Back to the website', 'fas fa-home', $this->generateUrl('app_home'));
-        yield MenuItem::linkToCrud('Employees', 'fas fa-users', Employee::class);
-        yield MenuItem::linkToCrud('Departments', 'fas fa-list', Department::class);
-        yield MenuItem::linkToCrud('Demands', 'fa fa-question-circle', Demand::class);
+        yield MenuItem::linkToDashboard(
+            'Dashboard',
+            'fas fa-users-cog'
+        );
+
+        yield MenuItem::section('Content');
+
+        yield MenuItem::linkToCrud(
+            'Employees',
+            'fas fa-users',
+            Employee::class
+        );
+
+        yield MenuItem::linkToCrud(
+            'Departments',
+            'fas fa-building',
+            Department::class
+        );
+
+        /**yield MenuItem::linkToCrud(
+            'Demands',
+            'fa fa-question-circle',
+            Demand::class
+        );**/
+        yield MenuItem::subMenu(
+            'Demands',
+            'fa fa-question-circle'
+                )->setSubItems([
+                        MenuItem::linkToCrud(
+                            'All',
+                            'fa fa-list',
+                            Demand::class
+                        )->setController(
+                            DemandCrudController::class
+                        )->setPermission(
+                            'ROLE_SUPER_ADMIN'
+                        ),
+                        MenuItem::linkToCrud(
+                            'Pending Approval',
+                            'fa fa-warning',
+                            Demand::class
+                        )->setPermission(
+                            'ROLE_SUPER_ADMIN'
+                        )->setController(
+                            DemandsPendingCrudController::class
+                        ),
+        ]);
+
+        yield MenuItem::section();
+
+
+        yield MenuItem::linktoUrl(
+            'Back to the website',
+            'fas fa-home',
+            $this->generateUrl('app_home')
+        );
     }
 
-    /**public function configureUserMenu(UserInterface $user) : UserMenu
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            ->overrideTemplate('crud/field/id', 'admin/field/id_with_icon.html.twig');
+    }
+
+    private function createChart(ChartBuilderInterface $chartBuilder): Chart
+    {
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart->setData([
+            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            'datasets' => [
+                [
+                    'label' => 'My First dataset',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => [0, 10, 5, 2, 20, 30, 45],
+                ],
+            ],
+        ]);
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => 100,
+                ],
+            ],
+        ]);
+        return $chart;
+    }
+
+    public function configureUserMenu(UserInterface $user) : UserMenu
     {
         if (!$user instanceof Employee)
         {
-            throw new \Exception('Wrong user');
+            throw new RuntimeException('Wrong user');
         }
 
-        //return parent::configureUserMenu($user)
-            //->setAvatarUrl($user->getAvatarUrl())
+        return parent::configureUserMenu($user)
+            ->setAvatarUrl($user->getAvatar())
             ->addMenuItems([
-                MenuItem::linkToCrud('My profile', 'fas-fa-user', $this->generateUrl(
-                    'App_profile_show'
-                ))
+               MenuItem::linkToCrud(
+                   'My profile',
+                   'fas-fa-user',
+                   $this->generateUrl(
+                    'App_profile_show', [
+                        'ENTITY_ID' => $user->getId()
+                        ]
+                    )
+               )
             ]);
-
-    }**/
+    }
 
 
     public function configureActions(): Actions
@@ -78,8 +189,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureAssets(): Assets
     {
-        return parent::configureAssets(); // TODO: Change the autogenerated stub
-            #->addWebpackEncoreEntry('app');
+        return parent::configureAssets()
+
+            ->addWebpackEncoreEntry('admin');
+
     }
 
 

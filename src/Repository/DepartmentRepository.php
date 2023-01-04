@@ -39,6 +39,23 @@ class DepartmentRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function getLastDepartmentRemoveDAndAddOne(): string
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT `dept_no` FROM `departments` ORDER BY `dept_no` DESC LIMIT 1";
+
+        $resultSet = $conn->executeQuery($sql);
+        $lastDept = (string)$resultSet->fetchOne();
+
+        return (int)substr($lastDept, -3) +1;
+    }
+
+
+
+
 //    /**
 //     * @return Department[] Returns an array of Department objects
 //     */
