@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Employee;
+use App\Entity\User;
 use App\Repository\EmployeeRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -22,10 +24,9 @@ class EmployeeCrudController extends AbstractCrudController
 
     private EmployeeRepository $employeeRepository;
 
-    public function __construct(EmployeeRepository $employeeRepository)
+    public function __construct(ManagerRegistry $registry, EmployeeRepository $employeeRepository)
     {
-
-
+        $this->registry = $registry;
         $this->employeeRepository = $employeeRepository;
     }
 
@@ -75,17 +76,18 @@ class EmployeeCrudController extends AbstractCrudController
         yield DateField::new('hire_date');
 
         $roles = [
-            'ROLE_USER',
-            'ROLE_MANAGER',
-            'ROLE_COMPTABLE',
+            'ROLE_SUPER_ADMIN',
             'ROLE_ADMIN',
-            'ROLE_SUPER_ADMIN'
+            'ROLE_COMPTABLE',
+            'ROLE_MANAGER',
+            'ROLE_USER',
         ];
         yield ChoiceField::new('roles')
             ->setFormType(ChoiceType::class)
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
-            ->renderExpanded();
+            ->renderExpanded()
+            ->renderAsBadges();
 
         yield BooleanField::new('isVerified');
     }

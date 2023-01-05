@@ -9,6 +9,8 @@ use App\Entity\User;
 use App\Entity\Department;
 use App\Entity\Employee;
 use App\Repository\EmployeeRepository;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\DBAL\Exception;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -18,6 +20,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Knp\Bundle\TimeBundle\DateTimeFormatter;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,11 +34,13 @@ use Symfony\UX\Chartjs\Model\Chart;
 class DashboardController extends AbstractDashboardController
 {
     private EmployeeRepository $employeeRepository;
-    private ChartBuilderInterface $chartBuilder;
-    public function __construct(EmployeeRepository $employeeRepository, ChartBuilderInterface $chartBuilder)
-    {
+    private ChartBuilderInterface $chartBuilderInterface;
+    private Employee $employee;
 
-        $this->chartbuilder = $chartBuilder;
+    public function __construct(Employee $employee, EmployeeRepository $employeeRepository, ChartBuilderInterface $chartBuilderInterface)
+    {
+        $this->user = $employee;
+        $this->chartbuilder = $chartBuilderInterface;
         $this->employeeRepository = $employeeRepository;
     }
 
@@ -44,11 +51,17 @@ class DashboardController extends AbstractDashboardController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'app_admin')]
-    public function index(ChartBuilderInterface $chartBuilder = null): Response
+    public function index(/**DateTimeFormatter $timeFormater = null,**/ ChartBuilderInterface $chartBuilder = null): Response
     {
+        //assert(null !== $timeFormater);
         assert(null !== $chartBuilder);
         $veterans = $this->employeeRepository->findVeterans();
         $arrivals = $this->employeeRepository->findArrivals();
+
+        /**foreach ($veterans as $veteran)
+        {
+            $veteran->ago = $timeFormater->formatDiff($veteran->hire_date);
+        }**/
 
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
 
@@ -104,14 +117,14 @@ class DashboardController extends AbstractDashboardController
                         )->setController(
                             DemandCrudController::class
                         )->setPermission(
-                            'ROLE_SUPER_ADMIN'
+                            'ROLE_ADMIN'
                         ),
                         MenuItem::linkToCrud(
                             'Pending Approval',
                             'fa fa-warning',
                             Demand::class
                         )->setPermission(
-                            'ROLE_SUPER_ADMIN'
+                            'ROLE_MANAGER'
                         )->setController(
                             DemandsPendingCrudController::class
                         ),
@@ -168,14 +181,12 @@ class DashboardController extends AbstractDashboardController
         return parent::configureUserMenu($user)
             ->setAvatarUrl($user->getAvatar())
             ->addMenuItems([
-               MenuItem::linkToCrud(
+               MenuItem::linkToUrl(
                    'My profile',
                    'fas-fa-user',
-                   $this->generateUrl(
-                    'App_profile_show', [
-                        'ENTITY_ID' => $user->getId()
-                        ]
-                    )
+
+                    'App_employee_show',
+
                )
             ]);
     }
