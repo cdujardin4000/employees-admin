@@ -13,13 +13,10 @@ use JetBrains\PhpStorm\Pure;
 class DeptManager
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\Column]
     private ?int $empNo = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 55)]
     private ?string $deptNo = null;
 
@@ -31,13 +28,13 @@ class DeptManager
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'supervisions')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
-    private  $employee;
+    private int $employee;
 
 
-
-    public function getId(): ?int
+    #[Pure] public function __construct($employee)
     {
-        return $this->id;
+        $this->employee = $employee;
+
     }
 
     public function getEmpNo(): ?int
@@ -88,33 +85,11 @@ class DeptManager
         return $this;
     }
 
-    /**
-     * @return Collection<int, Employee>
-     */
-    public function getManagers(): Collection
+
+    public function getEmployee(): int
     {
-        return $this->managers;
+        return $this->employee;
     }
 
-    public function addManager(Employee $manager): self
-    {
-        if (!$this->managers->contains($manager)) {
-            $this->managers->add($manager);
-            $manager->setManagements($this);
-        }
 
-        return $this;
-    }
-
-    public function removeManager(Employee $manager): self
-    {
-        if ($this->managers->removeElement($manager)) {
-            // set the owning side to null (unless already changed)
-            if ($manager->getManagements() === $this) {
-                $manager->setManagements(null);
-            }
-        }
-
-        return $this;
-    }
 }
