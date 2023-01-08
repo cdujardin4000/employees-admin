@@ -71,8 +71,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\InverseJoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     private Collection $departments;
 
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmpTitle::class,   fetch: "EAGER")]
+    #[ORM\ManyToMany(targetEntity: Title::class, fetch: "EAGER")]
+    #[ORM\JoinTable(name: 'emp_title')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    #[ORM\InverseJoinColumn(name: 'title_no', referencedColumnName: 'title_no')]
     private Collection $titles;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class,   fetch: "EAGER")]
@@ -84,6 +86,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Salary::class,   fetch: "EAGER")]
     private Collection $salaries;
+
+    #[ORM\OneToMany(mappedBy: 'titleOwning', targetEntity: EmpTitle::class)]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    private Collection $attributions;
     /**
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
@@ -97,6 +103,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Pure] public function __construct()
     {
+        $this->attributions = new ArrayCollection();
         $this->affectations = new ArrayCollection();
         $this->departments = new ArrayCollection();
         $this->demands = new ArrayCollection();
@@ -384,6 +391,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function getTitles(): Collection
     {
         return $this->titles;
+    }
+
+    public function getAttributions(): Collection
+    {
+        return $this->attributions;
     }
 
 }

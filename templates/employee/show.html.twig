@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Employee</h1>
 {{ dump(employee) }}
+    <h2>Profile</h2>
     <table class="table">
         <tbody>
             <tr>
@@ -47,6 +48,11 @@
                 <th>IsVerified</th>
                 <td>{{ employee.isVerified ? 'Yes' : 'No' }}</td>
             </tr>
+        </tbody>
+    </table>
+    <h2>Career History</h2>
+    <table class="table">
+        <tbody>
             <tr>
                 <th>Demands</th>
                 <td>
@@ -71,14 +77,7 @@
                     {% endfor %}
                 </td>
             </tr>
-            <tr>
-                <th>Titles</th>
-                <td>
-                    {% for title in employee.titles %}
-                        <p>{{ title.titleNo }} - From: {{ title.fromDate|date('Y-m-d')  }} To: {{ title.toDate|date('Y-m-d')  }}</p>
-                    {% endfor %}
-                </td>
-            </tr>
+
         </tbody>
     </table>
 

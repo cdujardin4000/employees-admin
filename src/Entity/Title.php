@@ -6,13 +6,11 @@ use App\Repository\TitleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TitleRepository::class)]
+#[ORM\Table('titles')]
 class Title
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
+    #[ORM\Id]
     #[ORM\Column]
     private ?int $title_no = null;
 
@@ -22,10 +20,6 @@ class Title
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getTitleNo(): ?int
     {
