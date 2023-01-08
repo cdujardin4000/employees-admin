@@ -55,6 +55,30 @@
                     {% endfor %}
                 </td>
             </tr>
+            <tr>
+                <th>Affectations</th>
+                <td>
+                    {% for affectation in employee.affectations %}
+                    <p>{{ affectation.deptNo }} - From: {{ affectation.fromDate|date('Y-m-d')  }} To: {{ affectation.toDate|date('Y-m-d')  }}</p>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Salaries</th>
+                <td>
+                    {% for salary in employee.salaries %}
+                        <p>{{ salary.salary }} - From: {{ salary.fromDate|date('Y-m-d')  }} To: {{ salary.toDate|date('Y-m-d')  }}</p>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Titles</th>
+                <td>
+                    {% for title in employee.titles %}
+                        <p>{{ title.titleNo }} - From: {{ title.fromDate|date('Y-m-d')  }} To: {{ title.toDate|date('Y-m-d')  }}</p>
+                    {% endfor %}
+                </td>
+            </tr>
         </tbody>
     </table>
 

@@ -71,7 +71,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\InverseJoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     private Collection $departments;
 
-
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmpTitle::class,   fetch: "EAGER")]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    private Collection $titles;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class,   fetch: "EAGER")]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
@@ -99,6 +101,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->departments = new ArrayCollection();
         $this->demands = new ArrayCollection();
         $this->salaries = new ArrayCollection();
+        $this->titles = new ArrayCollection();
     }
     /**
 
@@ -378,5 +381,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getTitles(): Collection
+    {
+        return $this->titles;
+    }
 
 }

@@ -42,10 +42,8 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-
         main:
-           # stateless: false
-            context: main
+
             lazy: true
             provider: app_user_provider
             form_login:

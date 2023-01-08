@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-
+use Doctrine\ORM\Mapping as ORM;
 use App\Controller\DemandController;
 use App\Entity\Demand;
 use App\Entity\User;
@@ -146,6 +146,21 @@ class DashboardController extends AbstractDashboardController
             ->overrideTemplate('crud/field/id', 'admin/field/id_with_icon.html.twig');
     }
 
+    public function configureActions(): Actions
+    {
+        return parent::configureActions()
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+    }
+
+    public function configureAssets(): Assets
+    {
+        return parent::configureAssets()
+
+            ->addWebpackEncoreEntry('admin');
+
+    }
+
+
     private function createChart(ChartBuilderInterface $chartBuilder): Chart
     {
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
@@ -184,27 +199,17 @@ class DashboardController extends AbstractDashboardController
                MenuItem::linkToUrl(
                    'My profile',
                    'fas-fa-user',
+                   $this->generateUrl('app_employee_show',
+                       [
+                           'id' => $user->getId(),
 
-                    'App_employee_show',
-
+                       ]
+                   )
                )
             ]);
     }
 
 
-    public function configureActions(): Actions
-    {
-        return parent::configureActions()
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
-    }
-
-    public function configureAssets(): Assets
-    {
-        return parent::configureAssets()
-
-            ->addWebpackEncoreEntry('admin');
-
-    }
 
 
 }
