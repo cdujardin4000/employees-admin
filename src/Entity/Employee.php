@@ -65,11 +65,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     private ?DateTimeInterface $created_at = null;
 
 
-    #[ORM\ManyToMany(targetEntity: Department::class,  fetch: "EAGER")]
+    #[ORM\ManyToMany(targetEntity: Department::class, inversedBy:'employees', fetch: "EAGER")]
     #[ORM\JoinTable(name: 'dept_emp')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     #[ORM\InverseJoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     private Collection $departments;
+
+    #[ORM\ManyToMany(targetEntity: Department::class, inversedBy:'managers', fetch: "EAGER")]
+    #[ORM\JoinTable(name: 'dept_manager')]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    #[ORM\InverseJoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
+    private Collection $managements;
 
     #[ORM\ManyToMany(targetEntity: Title::class, fetch: "EAGER")]
     #[ORM\JoinTable(name: 'emp_title')]
@@ -90,6 +96,10 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'titleOwning', targetEntity: EmpTitle::class)]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $attributions;
+
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    private Collection $supervisions;
     /**
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
@@ -103,6 +113,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Pure] public function __construct()
     {
+        $this->managements = new ArrayCollection();
+        $this->supervisions = new ArrayCollection();
         $this->attributions = new ArrayCollection();
         $this->affectations = new ArrayCollection();
         $this->departments = new ArrayCollection();
@@ -398,4 +410,13 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->attributions;
     }
 
+    public function getSupervisions(): Collection
+    {
+        return $this->supervisions;
+    }
+
+    public function getManagements(): Collection
+    {
+        return $this->managements;
+    }
 }

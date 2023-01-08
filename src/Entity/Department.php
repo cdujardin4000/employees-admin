@@ -6,6 +6,7 @@ use App\Repository\DepartmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
 #[ORM\Table('departments')]
@@ -28,7 +29,7 @@ class Department
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roi_url = null;
 
-    #[ORM\ManyToMany(targetEntity: Employee::class)]
+    #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'departments')]
     #[ORM\JoinTable(name: 'dept_emp')]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
@@ -37,17 +38,17 @@ class Department
 
     /**#[ORM\OneToMany(mappedBy: 'department', targetEntity: DeptEmp::class)]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
-    private  Collection $mutations;
+    private  Collection $mutations;**/
 
+    #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'managements')]
     #[ORM\JoinTable(name: 'dept_manager')]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
-    #[ORM\ManyToMany(targetEntity: Employee::class, inversedBy: 'departments')]
-    private Collection $managers;**/
+    private Collection $managers;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
-        //$this->managers = new ArrayCollection();
+        $this->managers = new ArrayCollection();
         $this->employees = new ArrayCollection();
         //$this->mutations = new ArrayCollection();
     }
@@ -109,7 +110,7 @@ class Department
     {
         return $this->employees;
     }
-/**
+
     public function getManagers(): Collection
     {
         return $this->managers;
@@ -129,7 +130,7 @@ class Department
         $this->managers->removeElement($manager);
 
         return $this;
-    }**/
+    }
 
 
 

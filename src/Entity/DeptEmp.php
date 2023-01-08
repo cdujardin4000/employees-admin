@@ -27,7 +27,7 @@ class DeptEmp
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'affectations')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
-    private $employee = null;
+    private $employee;
 /**
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'mutations')]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]

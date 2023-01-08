@@ -5,18 +5,20 @@ namespace App\Entity;
 use App\Repository\EmpTitleRepository;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: EmpTitleRepository::class)]
 class EmpTitle
 {
     #[Id, Column(type: 'string'), ManyToOne(targetEntity: Employee::class, inversedBy: 'titles')]
-    private Employee $employee;
+    private Employee $empNo;
     #[Id, Column(type: 'string'), ManyToOne(targetEntity: Title::class, inversedBy: 'attributions')]
     private Title $titleNo;
     #[Id, Column(type: Types::DATE_MUTABLE)]
@@ -29,21 +31,21 @@ class EmpTitle
 
 
     public function __construct(
-        Employee $employee,
+        Employee $empNo,
         Title $titleNo,
         DateTime $fromDate,
 
     )
     {
         $this->titleOwnings = new ArrayCollection;
-        $this->employee = $employee;
+        $this->empNo = $empNo;
         $this->titleNo = $titleNo;
         $this->fromDate = $fromDate;
     }
 
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?DateTimeInterface $toDate = null;
+    private ?DateTime $toDate = null;
 
 
 
@@ -76,28 +78,30 @@ class EmpTitle
         return $this;
     }
 
-    public function getFromDate(): ?DateTimeInterface
+    public function getFromDate(): ?DateTime
     {
         return $this->fromDate;
     }
 
-    public function setFromDate(DateTimeInterface $fromDate): self
+    public function setFromDate(DateTime $fromDate): self
     {
         $this->fromDate = $fromDate;
 
         return $this;
     }
 
-    public function getToDate(): ?DateTimeInterface
+    public function getToDate(): ?DateTime
     {
         return $this->toDate;
     }
 
-    public function setToDate(DateTimeInterface $toDate): self
+    public function setToDate(DateTime $toDate): self
     {
         $this->toDate = $toDate;
 
         return $this;
     }
+
+
 
 }

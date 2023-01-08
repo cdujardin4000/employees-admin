@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: DeptManagerRepository::class)]
 class DeptManager
@@ -28,14 +29,11 @@ class DeptManager
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $toDate = null;
 
-    #[ORM\ManyToOne( inversedBy: 'managements')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Collection $managers;
+    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'supervisions')]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    private  $employee;
 
-    public function __construct()
-    {
-        $this->managers = new ArrayCollection();
-    }
+
 
     public function getId(): ?int
     {
