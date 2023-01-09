@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -20,6 +21,13 @@ class EmployeeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $roles = [
+            'ROLE_SUPER_ADMIN',
+            'ROLE_ADMIN',
+            'ROLE_COMPTABLE',
+            'ROLE_MANAGER',
+            'ROLE_USER',
+        ];
         $now = new DateTime();
         $builder
             ->add('first_name')
@@ -39,14 +47,13 @@ class EmployeeType extends AbstractType
                 'days' => [$now->format('d')],
             ])
             ->add('password')
-            ->add('roles', RoleType::class)
-            ->add('isVerified')
-            ->get('roles')->addModelTransformer(
-                new CallbackTransformer(
-                    fn ($rolesAsArray) => count($rolesAsArray) ? $rolesAsArray[0]: null,
-                    fn ($rolesAsString) => [$rolesAsString]
-                )
-            );
+            ->add('roles', ChoiceType::class, [
+                'choices' => array_combine($roles, $roles),
+                'expanded' => true,
+                'multiple' => true
+            ])
+            ->add('isVerified');
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
