@@ -4,12 +4,12 @@
 
 {% block body %}
     <h1>Department</h1>
-
+    {{ dump(department) }}
     <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ department.id }}</td>
+                <td>{{ department.deptNo }}</td>
             </tr>
             <tr>
                 <th>Dept_name</th>
@@ -32,7 +32,7 @@
 
     <a href="{{ path('app_department_index') }}">back to list</a>
 
-    <a href="{{ path('app_department_edit', {'id': department.id}) }}">edit</a>
+    <a href="{{ path('app_department_edit', {'id': department.deptNo}) }}">edit</a>
 
     {{ include('department/_delete_form.html.twig') }}
 {% endblock %}

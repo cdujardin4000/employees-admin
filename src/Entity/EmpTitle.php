@@ -30,7 +30,7 @@ class EmpTitle
 
 
 
-    public function __construct(
+    #[Pure] public function __construct(
         Employee $empNo,
         Title $titleNo,
         DateTime $fromDate,
