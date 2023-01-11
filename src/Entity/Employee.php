@@ -2,9 +2,11 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
@@ -64,6 +66,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $created_at = null;
 
+    #[ORM\Column]
+    public ?string $ago;
 
     #[ORM\ManyToMany(targetEntity: Department::class, inversedBy:'employees', fetch: "EAGER")]
     #[ORM\JoinTable(name: 'dept_emp')]
@@ -85,6 +89,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptEmp::class,   fetch: "EAGER")]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    #[ORM\InverseJoinColumn(name: 'dept_name', referencedColumnName: 'dept_name')]
     private Collection $affectations;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Demand::class,   fetch: "EAGER")]
@@ -100,15 +105,17 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $supervisions;
+
+    private string $current;
+
     /**
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
-    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
-    private Collection $managingStories;
-
-
+     * #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
+     * #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+     * private Collection $managingStories;
      *
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Salary::class, orphanRemoval: false)]
-    private Collection $salaries;**/
+     * #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Salary::class, orphanRemoval: false)]
+     * private Collection $salaries;**@throws Exception
+     */
 
 
     #[Pure] public function __construct()
@@ -121,6 +128,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
         $this->salaries = new ArrayCollection();
         $this->titles = new ArrayCollection();
+
     }
     /**
 
@@ -131,7 +139,19 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-**/
+
+    public function getCurrentDep(): ?string
+    {
+        return $this->getCurrentDepartment();
+    }
+
+    public function setCurrent(string $current): self
+    {
+        $this->current = $this->getRepository()($this->getId());
+
+        return $this;
+    } **/
+
     public function get_emp_no(): ?int
     {
         return $this->id;
@@ -209,12 +229,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getAvatar(): ?string
     {
-        return $this->avatar;
+        if (!$this->avatar) {
+            return null;
+        }
+        if (str_contains($this->avatar, '/')) {
+            return $this->avatar;
+        }
+        return sprintf('/assets/img/employees/%s', $this->avatar);
     }
 
-    public function setAvatar(?string $avatar): self
+    public function setAvatar(?string $avatarUrl): self
     {
-        $this->avatar = $avatar;
+        $this->avatar = $avatarUrl;
 
         return $this;
     }
@@ -419,4 +445,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->managements;
     }
+
+
+
 }

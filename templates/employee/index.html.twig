@@ -25,6 +25,7 @@
         </thead>
         <tbody>
         {% for employee in employees %}
+{{ dump(employee.affectations) }}
             <tr>
                 <td>{{ employee.id }}</td>
                 <td>{{ employee.firstName }}</td>
@@ -40,7 +41,7 @@
                 <td>{{ employee.email }}</td>
                 <td>
                     {% for affectation in employee.departments %}
-                    <p>{{ affectation }} </p>
+                    <p>{{ affectation.deptName }} </p>
                     {% endfor %}
                 </td>
                 <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>

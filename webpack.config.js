@@ -21,20 +21,15 @@ Encore
      * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
      */
 
-    .addEntry('style', './assets/styles/app.scss' )
+    .addEntry('adminJs', './assets/admin.js')
     .addEntry('app', './assets/app.js')
-
-
-    .addEntry('admin', './assets/styles/admin.scss' )
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
 
-
-
-
+    .addEntry('style', './assets/styles/app.scss' )
+    .addEntry('admin', './assets/styles/admin.scss' )
     //.addEntry('register', './assets/register.js') customstyle
-
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     //.splitEntryChunks()

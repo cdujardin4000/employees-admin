@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Department;
 use App\Form\DepartmentType;
 use App\Repository\DepartmentRepository;
+use Doctrine\DBAL\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,22 +14,32 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/department')]
 class DepartmentController extends AbstractController
 {
+    /**
+     * @throws Exception
+     */
     #[Route('/', name: 'app_department_index', methods: ['GET'])]
     public function index(DepartmentRepository $departmentRepository): Response
     {
+
+
         return $this->render('department/index.html.twig', [
             'departments' => $departmentRepository->findAll(),
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('/new', name: 'app_department_new', methods: ['GET', 'POST'])]
     public function new(Request $request, DepartmentRepository $departmentRepository): Response
     {
         $department = new Department();
+        $newDeptNo = $departmentRepository->getLastDepartmentRemoveDAndAddOneBeforeAddingD();
         $form = $this->createForm(DepartmentType::class, $department);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $department->setDeptNo($newDeptNo);
             $departmentRepository->save($department, true);
 
             return $this->redirectToRoute('app_department_index', [], Response::HTTP_SEE_OTHER);

@@ -13,7 +13,6 @@
             <ol>
                 {% for arrival in arrivals %}
                     <li>
-
                         <a href="{{ path('app_employee_show', {'id': arrival.emp_no }) }}"> {{ arrival.first_name }} {{ arrival.last_name }}</a>- {{ arrival.hire_date|date('Y-m-d') }}
                     </li>
                 {% endfor %}
@@ -24,7 +23,7 @@
             <ol>
                 {% for veteran in veterans %}
                     <li>
-                        <a href="{{ path('app_employee_show', {'id': veteran.emp_no }) }}">{{ veteran.first_name }} {{ veteran.last_name }}</a>- {{ veteran.hire_date|date('Y-m-d') }}
+                        <a href="{{ path('app_employee_show', {'id': veteran.emp_no }) }}">{{ veteran.first_name }} {{ veteran.last_name }}</a>- {{ veteran.hire_date|date('Y-m-d') }}, {{ veteran.ago }}
                     </li>
                 {% endfor %}
             </ol>

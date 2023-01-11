@@ -1,0 +1,17 @@
+    Rôles prédéfinis :
+        IS_AUTHENTICATED
+        IS_AUTHENTICATED_REMEMBERED
+        IS_AUTHENTICATED_FULLY
+        IS_REMEMBERED
+        IS_IMPERSONATOR
+        PUBLIC_ACCESS
+
+Dans le contrôleur
+
+    Ne pas utiliser $user->getRoles()
+    Utiliser les méthodes isGranted('ROLE_ADMIN') et denyAccessUnlessGranted('ROLE_ADMIN')
+    Utiliser un attribut pour sécuriser toutes les méthodes d'un contrôleur ou une méthode en particulier #[IsGranted('ROLE_ADMIN')]
+
+Dans le template Twig
+
+    is_granted('ROLE_ADMIN')

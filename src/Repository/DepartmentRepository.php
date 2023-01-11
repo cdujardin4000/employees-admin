@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Department;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,9 +41,9 @@ class DepartmentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public function getLastDepartmentRemoveDAndAddOne(): string
+    public function getLastDepartmentRemoveDAndAddOneBeforeAddingD(): string // :p
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT `dept_no` FROM `departments` ORDER BY `dept_no` DESC LIMIT 1";
@@ -50,7 +51,8 @@ class DepartmentRepository extends ServiceEntityRepository
         $resultSet = $conn->executeQuery($sql);
         $lastDept = (string)$resultSet->fetchOne();
 
-        return (int)substr($lastDept, -3) +1;
+        $nb = (int)substr($lastDept, -3) +1;
+        return 'd0'.$nb;
     }
 
 

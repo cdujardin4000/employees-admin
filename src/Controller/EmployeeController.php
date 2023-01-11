@@ -15,11 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/employee')]
 class EmployeeController extends AbstractController
 {
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     #[Route('/', name: 'app_employee_index', methods: ['GET'])]
     public function index(EmployeeRepository $employeeRepository): Response
     {
         return $this->render('employee/index.html.twig', [
             'employees' => $employeeRepository->findAll(),
+
         ]);
     }
 
@@ -46,7 +50,7 @@ class EmployeeController extends AbstractController
 
             $employeeRepository->save($employee, true);
 
-            return $this->redirectToRoute('app_dept_emp_new', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_dept_emp_new', ['employee' => $employee], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('employee/new.html.twig', [

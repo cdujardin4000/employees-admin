@@ -53,9 +53,21 @@ class Department
         //$this->mutations = new ArrayCollection();
     }
 
+    public function getId(): ?string
+    {
+        return $this->dept_no;
+    }
+
     public function getDeptNo(): ?string
     {
         return $this->dept_no;
+    }
+
+    public function setDeptNo($deptNo): self
+    {
+        $this->dept_no = $deptNo;
+
+        return $this;
     }
 
     public function getDeptName(): ?string

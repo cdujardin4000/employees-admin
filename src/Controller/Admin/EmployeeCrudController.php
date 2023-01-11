@@ -8,6 +8,7 @@ use App\Repository\EmployeeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -42,11 +43,13 @@ class EmployeeCrudController extends AbstractCrudController
         yield IdField::new('id')
             ->onlyOnIndex();
 
-        yield Field::new('firstName')
-            ->onlyOnForms();
+        yield TextField::new('firstName')
+            ->onlyOnForms()
+            ->setMaxLength(14);
 
-        yield Field::new('lastName')
-            ->onlyOnForms();
+        yield TextField::new('lastName')
+            ->onlyOnForms()
+            ->setMaxLength(16);
 
         yield TextField::new('fullName')
             ->hideOnForm();
@@ -64,11 +67,19 @@ class EmployeeCrudController extends AbstractCrudController
             ]);
 
         yield ImageField::new('photo')
-            ->setUploadDir('assets\img\employees')
+            ->setUploadDir('assets/img/employees')
             ->onlyOnForms();
 
+        /**yield AvatarField::new('avatar')
+            ->formatValue(static function ($value, Employee $employee) {
+                return $employee?->getAvatar();
+            })
+            ->hideOnForm();**/
+
         yield ImageField::new('avatar')
-            ->setUploadDir('assets\img\employees\avatars')
+            ->setBasePath('assets/img/employees/avatars')
+            ->setUploadDir('public/uploads/')
+            ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
             ->onlyOnForms();
 
         yield EmailField::new('email');
@@ -89,6 +100,7 @@ class EmployeeCrudController extends AbstractCrudController
             ->renderExpanded()
             ->renderAsBadges();
 
-        yield BooleanField::new('isVerified');
+        yield BooleanField::new('isVerified')
+            ->hideOnForm();
     }
 }

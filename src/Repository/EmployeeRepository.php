@@ -86,7 +86,7 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT `emp_no`, `hire_date`, `first_name`, `last_name` FROM `employees` ORDER BY `hire_date` ASC LIMIT 10";
+        $sql = "SELECT `emp_no`, `hire_date`, `first_name`, `last_name`, `ago` FROM `employees` ORDER BY `hire_date` ASC LIMIT 10";
 
         //dd($resultSet->fetchOne());
         return $conn->executeQuery($sql)->fetchAllAssociative();
@@ -135,12 +135,18 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
     /**
      * @throws Exception
      */
-    public function getActualDepartment() : string
+    public function getCurrentDepartment(int $emp_no) : string
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT `dept_no` FROM `dept_emp` WHERE `to_date` LIKE '9999%'";
-        $resultSet = $conn->executeQuery($sql);
+        $sql = "SELECT * FROM `departments` d INNER JOIN `dept_emp` de ON d.`dept_no`=de.`dept_no` WHERE `to_date` LIKE '9999%' AND ´emp_no´ LIKE :emp_no";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery([
+            'emp_no' => $emp_no,
+        ]);
+
         return  (string)$resultSet->fetchOne();
     }
 

@@ -18,7 +18,6 @@ class DeptEmpType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $today = new DateTime();
         $builder
             /**->add('emp_no', EntityType::class, [
                 'class' => Employee::class,
@@ -32,20 +31,10 @@ class DeptEmpType extends AbstractType
             ])**/
             ->add('dept_no', EntityType::class, [
                 'class' => Department::class,
-                'by_reference' => false,
+
                 'attr' => [
                     'class' => 'select2'
                 ],
-            ])
-            ->add('from_date', DateTimeType::class, [
-                'years' => [$today->format('Y')],
-                'months' => [$today->format('m')],
-                'days' => [$today->format('d')],
-            ])
-            ->add('to_date', DateTimeType::class, [
-                'years' => [1999],
-                'months' => [01],
-                'days' => [01],
             ])
         ;
     }

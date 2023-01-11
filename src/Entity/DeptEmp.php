@@ -17,13 +17,13 @@ class DeptEmp
 
     #[ORM\Column(length: 4)]
     #[ORM\Id]
-    private ?string $dept_no = null;
+    public ?string $dept_no = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTime $from_date = null;
+    public ?DateTime $from_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTime $to_date = null;
+    public ?DateTime $to_date = null;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'affectations')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]

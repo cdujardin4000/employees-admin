@@ -7,13 +7,13 @@ use App\Repository\EmployeeRepository;
 use App\Entity\DeptEmp;
 use App\Form\DeptEmpType;
 use App\Repository\DeptEmpRepository;
-
-use DateTimeZone;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 #[Route('/dept/emp')]
 class DeptEmpController extends AbstractController
@@ -32,6 +32,7 @@ class DeptEmpController extends AbstractController
 
     /**
      * @throws \Doctrine\DBAL\Exception
+     * @throws \Exception
      */
     #[Route('/new', name: 'app_dept_emp_new', methods: ['GET', 'POST'])]
     public function new(Request $request, DeptEmpRepository $deptEmpRepository, EmployeeRepository $employeeRepository ): Response
@@ -41,14 +42,14 @@ class DeptEmpController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //dd($employeeRepository->findLatest());
+
             $lastEmp = $employeeRepository->findLatest();
-            dump($lastEmp);
-            //$deptEmp->setFromDate(new DateTime('Y').'-'.new DateTime('m').'-'.new DateTime('d'));
-            //$deptEmp->setToDate(new DateTime('9999-01-01'));
-            $deptEmp->setEmpNo($lastEmp);
-           // dd($deptEmp);
-            $deptEmpRepository->insertInto($lastEmp, $deptEmp->getDeptNo(), $deptEmp->getFromDate(), $deptEmp->getToDate());
+
+            $from = new DateTime('now');
+            $to = new DateTime('9999-01-01');
+
+           //dd($deptEmp);
+            $deptEmpRepository->insertInto($lastEmp, $deptEmp->getDeptNo(), $from, $to);
             $deptEmpRepository->save($deptEmp, true);
 
             return $this->redirectToRoute('app_dept_emp_index', [], Response::HTTP_SEE_OTHER);
@@ -89,7 +90,7 @@ class DeptEmpController extends AbstractController
     #[Route('/{emp_no}', name: 'app_dept_emp_delete', methods: ['POST'])]
     public function delete(Request $request, DeptEmp $deptEmp, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$deptEmp->getEmp_no(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$deptEmp->getEmpNo(), $request->request->get('_token'))) {
             $entityManager->remove($deptEmp);
             $entityManager->flush();
         }
