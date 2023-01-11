@@ -46,7 +46,7 @@ class DepartmentRepository extends ServiceEntityRepository
     public function getLastDepartmentRemoveDAndAddOneBeforeAddingD(): string // :p
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT `dept_no` FROM `departments` ORDER BY `dept_no` DESC LIMIT 1";
+        $sql = "SELECT dept_no FROM departments ORDER BY dept_no DESC LIMIT 1";
 
         $resultSet = $conn->executeQuery($sql);
         $lastDept = (string)$resultSet->fetchOne();
@@ -55,7 +55,47 @@ class DepartmentRepository extends ServiceEntityRepository
         return 'd0'.$nb;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function getNbEmployees($dept_no): int
+    {
 
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT  COUNT(*)  FROM dept_emp WHERE dept_no LIKE :dept_no AND to_date LIKE '9999-01-01'";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery([
+            'dept_no' => $dept_no,
+        ]);
+        //dd($resultSet->fetchOne());
+        return  (int)$resultSet->fetchOne();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getManagerNo($dept_no)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT emp_no FROM dept_manager 
+                WHERE dept_no='$dept_no'
+                AND to_date='9999-01-01'";
+        return $conn->executeQuery($sql)->fetchOne();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getManager($manager): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT first_name, last_name, email FROM employees WHERE emp_no='$manager'";
+
+        return $conn->executeQuery($sql)->fetchAllAssociative();
+    }
 
 
 //    /**

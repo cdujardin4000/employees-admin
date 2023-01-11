@@ -51,11 +51,16 @@ class DepartmentController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('/{id}', name: 'app_department_show', methods: ['GET'])]
-    public function show(Department $department): Response
+    public function show(Department $department, DepartmentRepository $departmentRepository): Response
     {
         return $this->render('department/show.html.twig', [
             'department' => $department,
+            'nbEmployees' => $departmentRepository->getNbEmployees($department->getDeptNo()),
+            'manager' => $departmentRepository->getManager($departmentRepository->getManagerNo($department->getDeptNo())),
         ]);
     }
 

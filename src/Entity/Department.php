@@ -51,6 +51,7 @@ class Department
         $this->managers = new ArrayCollection();
         $this->employees = new ArrayCollection();
         //$this->mutations = new ArrayCollection();
+
     }
 
     public function getId(): ?string

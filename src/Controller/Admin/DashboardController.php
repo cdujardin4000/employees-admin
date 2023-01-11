@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Repository\DepartmentRepository;
+use App\Repository\DeptManagerRepository;
 use DateTime;
 use App\Entity\Demand;
 use App\Entity\Department;
@@ -30,15 +32,18 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
+    private DeptManagerRepository $deptManagerRepository;
     private EmployeeRepository $employeeRepository;
     private ChartBuilderInterface $chartBuilderInterface;
-    private Employee $employee;
+    private DepartmentRepository $departmentRepository;
 
-    public function __construct(Employee $employee, EmployeeRepository $employeeRepository, ChartBuilderInterface $chartBuilderInterface)
+    public function __construct(Employee $employee, EmployeeRepository $employeeRepository, DepartmentRepository $departmentRepository, DeptManagerRepository $deptManagerRepository, ChartBuilderInterface $chartBuilderInterface)
     {
         $this->user = $employee;
         $this->chartbuilder = $chartBuilderInterface;
         $this->employeeRepository = $employeeRepository;
+        $this->deptManagerRepository = $deptManagerRepository;
+        $this->departmentRepository = $departmentRepository;
     }
 
     /**
@@ -57,6 +62,8 @@ class DashboardController extends AbstractDashboardController
 
         $veterans = $this->employeeRepository->findVeterans();
         $arrivals = $this->employeeRepository->findArrivals();
+
+
 
         foreach ($veterans as $veteran)
         {
