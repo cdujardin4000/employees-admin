@@ -59,11 +59,15 @@ class EmployeeController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee): Response
+    public function show(Employee $employee, EmployeeRepository $employeeRepository): Response
     {
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
+            'current' => $employeeRepository->getCurrentDepartment($employee->getId())
         ]);
     }
 

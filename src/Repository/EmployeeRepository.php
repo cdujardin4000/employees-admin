@@ -139,7 +139,7 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT * FROM `departments` d INNER JOIN `dept_emp` de ON d.`dept_no`=de.`dept_no` WHERE `to_date` LIKE '9999%' AND ´emp_no´ LIKE :emp_no";
+        $sql = "SELECT * FROM `departments` d INNER JOIN dept_emp.dept_no de ON d.`dept_no`=de.`dept_no` WHERE `to_date`='9999%' AND ´emp_no´='$emp_no'";
 
         $stmt = $conn->prepare($sql);
 

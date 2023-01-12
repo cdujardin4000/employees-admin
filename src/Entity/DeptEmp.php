@@ -20,10 +20,10 @@ class DeptEmp
     public ?string $dept_no = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    public ?DateTime $from_date = null;
+    public ?DateTimeInterface $from_date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    public ?DateTime $to_date = null;
+    public ?DateTimeInterface $to_date = null;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'affectations')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
@@ -85,4 +85,15 @@ class DeptEmp
         return (string)$this->dept_no;
     }
 
+    public function setEmployee(Employee $employee): self
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    public function getEmployee(): Employee
+    {
+        return $this->employee;
+    }
 }

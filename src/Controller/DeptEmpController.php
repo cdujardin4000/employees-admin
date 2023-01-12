@@ -42,17 +42,22 @@ class DeptEmpController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $lastEmp = $employeeRepository->findLatest();
-
+            $empNo = $employeeRepository->findLatest();
+            $deptEmp->setEmpNo($empNo);
+            //dd($request->get('dept_emp')['dept_no']);
+            $deptEmp->setDeptNo($request->get('dept_emp')['dept_no']);
+            //dd($deptEmp);
             $from = new DateTime('now');
+            //$from = $from->format('Y-m-d');
+            $deptEmp->setFromDate($from);
             $to = new DateTime('9999-01-01');
-
+            $deptEmp->setToDate($to);
+            $deptEmp->setEmployee($employeeRepository->find($empNo));
            //dd($deptEmp);
-            $deptEmpRepository->insertInto($lastEmp, $deptEmp->getDeptNo(), $from, $to);
+           // $deptEmpRepository->insertInto($lastEmp, $deptEmp->getDeptNo(), $from, $to);
             $deptEmpRepository->save($deptEmp, true);
 
-            return $this->redirectToRoute('app_dept_emp_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_employee_show', ['id' => $deptEmp->getEmpNo()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('dept_emp/new.html.twig', [

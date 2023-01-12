@@ -48,6 +48,7 @@ class DepartmentController extends AbstractController
         return $this->render('department/new.html.twig', [
             'department' => $department,
             'form' => $form,
+
         ]);
     }
 
@@ -61,6 +62,7 @@ class DepartmentController extends AbstractController
             'department' => $department,
             'nbEmployees' => $departmentRepository->getNbEmployees($department->getDeptNo()),
             'manager' => $departmentRepository->getManager($departmentRepository->getManagerNo($department->getDeptNo())),
+            'offers' => $department->getOffers(),
         ]);
     }
 

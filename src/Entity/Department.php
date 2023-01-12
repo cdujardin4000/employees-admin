@@ -36,9 +36,9 @@ class Department
     private Collection $employees;
 
 
-    /**#[ORM\OneToMany(mappedBy: 'department', targetEntity: DeptEmp::class)]
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: DptTitle::class)]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
-    private  Collection $mutations;**/
+    private  Collection $offers;
 
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'managements')]
     #[ORM\JoinTable(name: 'dept_manager')]
@@ -50,7 +50,7 @@ class Department
     {
         $this->managers = new ArrayCollection();
         $this->employees = new ArrayCollection();
-        //$this->mutations = new ArrayCollection();
+        $this->offers = new ArrayCollection();
 
     }
 
@@ -146,6 +146,11 @@ class Department
     }
 
 
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+    
 
     public function __toString() :string {
         return (string)$this->dept_name;

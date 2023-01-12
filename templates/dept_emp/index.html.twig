@@ -23,8 +23,8 @@
                 <td>{{ dept_emp.fromDate ? dept_emp.fromDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ dept_emp.toDate ? dept_emp.toDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_dept_emp_show', {'emp_no': dept_emp.emp_no}) }}">show</a>
-                    <a href="{{ path('app_dept_emp_edit', {'emp_no': dept_emp.emp_no}) }}">edit</a>
+                    <a href="{{ path('app_dept_emp_show', {'emp_no': dept_emp.empNo}) }}">show</a>
+                    <a href="{{ path('app_dept_emp_edit', {'emp_no': dept_emp.empNo}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

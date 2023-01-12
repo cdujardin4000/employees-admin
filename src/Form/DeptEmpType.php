@@ -31,7 +31,7 @@ class DeptEmpType extends AbstractType
             ])**/
             ->add('dept_no', EntityType::class, [
                 'class' => Department::class,
-
+                //'by_reference' => true,
                 'attr' => [
                     'class' => 'select2'
                 ],
