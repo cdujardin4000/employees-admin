@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit DptTitle{% endblock %}
+
+{% block body %}
+    <h1>Edit DptTitle</h1>
+
+    {{ include('dpt_title/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_dpt_title_index') }}">back to list</a>
+
+    {{ include('dpt_title/_delete_form.html.twig') }}
+{% endblock %}

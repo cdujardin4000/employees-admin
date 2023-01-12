@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DptTitle{% endblock %}
+
+{% block body %}
+    <h1>Create new DptTitle</h1>
+
+    {{ include('dpt_title/_form.html.twig') }}
+
+    <a href="{{ path('app_dpt_title_index') }}">back to list</a>
+{% endblock %}

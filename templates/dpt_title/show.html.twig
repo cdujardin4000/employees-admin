@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DptTitle{% endblock %}
+
+{% block body %}
+    <h1>DptTitle</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ dpt_title.id }}</td>
+            </tr>
+            <tr>
+                <th>DeptNo</th>
+                <td>{{ dpt_title.deptNo }}</td>
+            </tr>
+            <tr>
+                <th>TileNo</th>
+                <td>{{ dpt_title.tileNo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dpt_title_index') }}">back to list</a>
+
+    <a href="{{ path('app_dpt_title_edit', {'id': dpt_title.id}) }}">edit</a>
+
+    {{ include('dpt_title/_delete_form.html.twig') }}
+{% endblock %}
