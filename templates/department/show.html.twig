@@ -3,7 +3,7 @@
 {% block title %}Department{% endblock %}
 
 {% block body %}
-    {{ dump(department.offers) }}
+    {{ dump(offers) }}
     <h1>{{ department.deptName }}</h1>
     <table class="table">
         <tbody>
@@ -38,7 +38,7 @@
         </tbody>
     </table>
 
-    {%  for offer in department.offers %}
+    {%  for offer in offers %}
 
     <p>{{ offer }} </p>
     <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Apply</button></div>

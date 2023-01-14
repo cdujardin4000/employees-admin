@@ -5,21 +5,22 @@ namespace App\Entity;
 use App\Repository\DptTitleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+
+#[ORM\Table('dept_title')]
 #[ORM\Entity(repositoryClass: DptTitleRepository::class)]
 class DptTitle
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
-    #[ORM\Column(length: 4)]
+    #[ORM\Column('dept_no', type: 'string')]
+    #[ORM\Id]
     private ?string $deptNo = null;
 
-    #[ORM\Column]
-    private ?int $tileNo = null;
+    #[ORM\Column('dept_title', type: 'string')]
+    #[ORM\Id]
+    private ?int $titleNo = null;
 
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'offers')]
+    #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     private ?Department $department = null;
 
     public function getDeptNo(): ?string
@@ -34,14 +35,14 @@ class DptTitle
         return $this;
     }
 
-    public function getTileNo(): ?int
+    public function getTitleNo(): ?int
     {
-        return $this->tileNo;
+        return $this->titleNo;
     }
 
-    public function setTileNo(int $tileNo): self
+    public function setTitleNo(int $titleNo): self
     {
-        $this->tileNo = $tileNo;
+        $this->titleNo = $titleNo;
 
         return $this;
     }

@@ -68,45 +68,28 @@ security:
                 # where to redirect after logout
                 target: app_home
 
-
-
-
+    role_hierarchy:
+        ROLE_MEMBER:      ROLE_MEMBER
+        ROLE_USER:        ROLE_MEMBER
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_MODERATOR:   ROLE_COMPTABLE
+        ROLE_MANAGER:     [
+                ROLE_ADMIN,
+                ROLE_COMPTABLE
+        ]
+        ROLE_SUPER_ADMIN: [
+                ROLE_MANAGER,
+                ROLE_ALLOWED_TO_SWITCH
+        ]
 
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - {
-            path: ^/admin,
-            roles: [
-                ROLE_SUPER_ADMIN,
-                ROLE_ADMIN,
-                ROLE_COMPTABLE,
-                ROLE_MANAGER,
-                ROLE_USER,
-            ]
-        }
-        - {
-            path: ^/profile,
-            roles: [
-                    ROLE_SUPER_ADMIN,
-                    ROLE_ADMIN,
-                    ROLE_COMPTABLE,
-                    ROLE_MANAGER,
-                    ROLE_USER,
-            ]
-        }
-        - {
-            path: ^/member,
-            roles: [
-                ROLE_SUPER_ADMIN,
-                ROLE_ADMIN,
-                ROLE_COMPTABLE,
-                ROLE_MANAGER,
-                ROLE_USER,
-                ROLE_MEMBER,
-            ]
-        }
+         - { path: ^/member, roles: ROLE_MEMBER }
+         - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/admin, roles: [ ROLE_ADMIN, ROLE_MODERATOR, ROLE_MANAGER, ROLE_SUPER_ADMIN ] }
+
 
 when@test:
     security:

@@ -96,24 +96,28 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
 
     /**
      * @throws Exception
-
+     */
     public function getNbEmployeeByGender(): array
     {
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "select ps_area
-                , count( case when ps_gender='M'
+        $sql = "select gender
+                , count( case when gender='M'
                 then 1 end ) as Male
-                , count( case when ps_gender='F'
+                , count( case when gender='F'
                 then 1 end ) as Female
-                FROM `employees` OGROUP BY `ps_area`";
+                , count( case when gender='X'
+                then 1 end ) as Undefined
+                FROM employees e GROUP BY gender
+                INNER JOIN dept_emp de ON d.emp_no=de.emp_no
+                    WHERE de.to_date='9999-01-01'";
 
         //dd($resultSet->fetchOne());
         return $conn->executeQuery($sql)->fetchAllAssociative();
         // returns an array of arrays (i.e. a raw data set)
 
-    }*/
+    }
 
     /**
      * @throws Exception
@@ -135,19 +139,17 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
     /**
      * @throws Exception
      */
-    public function getCurrentDepartment(int $emp_no) : string
+    public function getCurrentDepartment(Employee $employee) : string
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT * FROM `departments` d INNER JOIN dept_emp.dept_no de ON d.`dept_no`=de.`dept_no` WHERE `to_date`='9999%' AND ´emp_no´='$emp_no'";
+        $sql = "SELECT d.dept_name FROM departments d  INNER JOIN dept_emp de  ON d.dept_no=de.dept_no WHERE to_date='9999-01-01' AND emp_no='$employee'";
 
-        $stmt = $conn->prepare($sql);
+        //dd($sql);
 
-        $resultSet = $stmt->executeQuery([
-            'emp_no' => $emp_no,
-        ]);
-
-        return  (string)$resultSet->fetchOne();
+        $resultSet = $conn->executeQuery($sql)->fetchOne();
+        //dd($resultSet);
+        return  (string)$resultSet;
     }
 
 }

@@ -4,6 +4,8 @@
 
 {% block body %}
     <h1>Employee</h1>
+    {% set current = app.request.get('current') %}
+    {{ dump(current) }}
     {#if app.request.get('_route').contains('app.user.id') #}
     <h2>Profile</h2>
     <div class="container rounded bg-white mt-5 mb-5">
@@ -25,7 +27,7 @@
                         <div class="col-md-12"><label class="labels">Hire date</label><input type="text" class="form-control" placeholder="Hire date" value="{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}"></div>
                         <div class="col-md-12"><label class="labels">Gender</label><input type="text" class="form-control" placeholder="gender" value="{{ employee.gender }}"></div>
                         <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control" placeholder="{{ employee.email }}" value="{{ employee.email }}"></div>
-                        <div class="col-md-12"><label class="labels">Current Department</label><input type="text" class="form-control" placeholder="Birth date" value="{{ employee['current'] }}"></div>
+                        <div class="col-md-12"><label class="labels">Current Department</label><input type="text" class="form-control" placeholder="    " value=""></div>
                     </div>
                     <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
                 </div>

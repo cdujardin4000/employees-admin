@@ -120,7 +120,7 @@ class DashboardController extends AbstractDashboardController
                         )->setController(
                             DemandCrudController::class
                         )->setPermission(
-                            'ROLE_ADMIN'
+                            'ROLE_SUPER_ADMIN'
                         ),
                         MenuItem::linkToCrud(
                             'Pending Approval',
@@ -129,7 +129,7 @@ class DashboardController extends AbstractDashboardController
                         )->setPermission(
                             'ROLE_MANAGER'
                         )->setController(
-                            DemandsPendingCrudController::class
+                            Demand2CrudController::class
                         ),
         ]);
 
@@ -141,6 +141,8 @@ class DashboardController extends AbstractDashboardController
             'fas fa-home',
             $this->generateUrl('app_home')
         );
+
+        yield MenuItem::linkToLogout('Logout', 'fa fa-exit');
     }
 
     public function configureCrud(): Crud
@@ -191,7 +193,7 @@ class DashboardController extends AbstractDashboardController
         );
     }
 
-    private function createChart(ChartBuilderInterface $chartBuilder): Chart
+    public function createChart(ChartBuilderInterface $chartBuilder): Chart
     {
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chart->setData([

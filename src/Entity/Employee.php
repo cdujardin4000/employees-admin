@@ -152,6 +152,18 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     } **/
 
+    public function getCurrent(): ?string
+    {
+        return $this->current;
+    }
+
+    public function setCurrent($current): self
+    {
+        $this->current = $current;
+
+        return $this;
+    }
+
     public function get_emp_no(): ?int
     {
         return $this->id;
@@ -223,6 +235,24 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getAvatarUrl(): ?string
+    {
+        if (!$this->avatar) {
+            return null;
+        }
+        if (str_contains($this->avatar, '/')) {
+            return $this->avatar;
+        }
+        return sprintf('/assets/img/employees/%s', $this->avatar);
+    }
+
+    public function setAvatarUrl(?string $avatarUrl): self
+    {
+        $this->avatar = $avatarUrl;
 
         return $this;
     }

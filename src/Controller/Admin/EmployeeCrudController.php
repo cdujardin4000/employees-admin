@@ -4,8 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Employee;
 use App\Repository\EmployeeRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -33,6 +39,16 @@ class EmployeeCrudController extends AbstractCrudController
         return Employee::class;
     }
 
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            return $queryBuilder;
+        }
+        //dd($this->getDepartment);
+        $queryBuilder->andWhere('entity.id = :id')->setParameter('id', $this->getUser()?->getId());
+        return $queryBuilder;
+    }
 
     public function configureFields(string $pageName): iterable
     {
@@ -73,6 +89,9 @@ class EmployeeCrudController extends AbstractCrudController
             ->hideOnForm();**/
 
         yield ImageField::new('avatar')
+            ->formatValue(static function ($value, ?Employee $user) {
+                return $user?->getAvatarUrl();
+            })
             ->setBasePath('assets/img/employees/avatars')
             ->setUploadDir('public/uploads/')
             ->setUploadedFileNamePattern('[slug]-[timestamp].[extension]')
@@ -98,5 +117,16 @@ class EmployeeCrudController extends AbstractCrudController
 
         yield BooleanField::new('isVerified')
             ->hideOnForm();
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            //->setEntityPermission('ADMIN_USER_EDIT')
+            //->setEntityPermission('ADMIN_USER_SHOW')
+            ->showEntityActionsInlined()
+            ->setDefaultSort([
+                'id' => 'ASC',
+            ]);
     }
 }
