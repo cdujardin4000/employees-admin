@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Demand;
+use App\Entity\Employee;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
@@ -30,12 +31,16 @@ class DemandCrudController extends AbstractCrudController
     }
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-    {dump($this);
+    {//dump($this);
         $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        if ($this->isGranted('ROLE_MANAGER')) {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             return $queryBuilder;
-        } //else if ($this->isGranted('ROLE_MANAGER')) {
-            $queryBuilder->andWhere('entity.id = :id')->setParameter('id', $this->getUser()?->getId());
+        }
+        if ($this->isGranted('ROLE_MANAGER')) {
+
+            $queryBuilder->select(Demand::class)->from('demands', 'de')->where('de.about='.$this->getUser()->getCurrent())->andWhere('de.deptNo='.$this->getUser()?->getCurrent());
+        }
+            //$queryBuilder->andWhere('entity.id = :id')->setParameter('id', $this->getUser()?->getId());
         //}
         //dd($this->getDepartment);
         $queryBuilder->andWhere('entity.id = :id')->setParameter('id', $this->getUser()?->getId());

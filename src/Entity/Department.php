@@ -83,6 +83,12 @@ class Department
         return $this;
     }
 
+    public function getOffers(): ?collection
+    {
+        return $this->offers;
+    }
+
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -145,11 +151,6 @@ class Department
         return $this;
     }
 
-
-    public function getOffers(): Collection
-    {
-        return $this->offers;
-    }
     
 
     public function __toString() :string {

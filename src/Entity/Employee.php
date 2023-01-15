@@ -136,21 +136,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $managingStories;
+     **/
 
-
-
-
-    public function getCurrentDep(): ?string
-    {
-        return $this->getCurrentDepartment();
-    }
-
-    public function setCurrent(string $current): self
-    {
-        $this->current = $this->getRepository()($this->getId());
-
-        return $this;
-    } **/
 
     public function getCurrent(): ?string
     {

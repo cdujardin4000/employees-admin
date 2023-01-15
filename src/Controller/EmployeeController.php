@@ -65,6 +65,8 @@ class EmployeeController extends AbstractController
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
     public function show(Employee $employee, EmployeeRepository $employeeRepository): Response
     {
+
+        //dd($employee->getDepartments()[0]);
         $employee->setCurrent($employeeRepository->getCurrentDepartment($employee));
 
         return $this->render('employee/show.html.twig', [

@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Employee>
@@ -139,11 +140,12 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
     /**
      * @throws Exception
      */
-    public function getCurrentDepartment(Employee $employee) : string
+    public function getCurrentDepartment($id) : string
     {
+
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT d.dept_name FROM departments d  INNER JOIN dept_emp de  ON d.dept_no=de.dept_no WHERE to_date='9999-01-01' AND emp_no='$employee'";
+        $sql = "SELECT dept_no FROM current_dept_emp WHERE emp_no='$id'";
 
         //dd($sql);
 

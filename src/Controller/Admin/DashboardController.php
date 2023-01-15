@@ -29,16 +29,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
+use Doctrine\Persistence\ManagerRegistry;
+
+
 
 class DashboardController extends AbstractDashboardController
 {
+    private ManagerRegistry $registry;
     private DeptManagerRepository $deptManagerRepository;
     private EmployeeRepository $employeeRepository;
     private ChartBuilderInterface $chartBuilderInterface;
     private DepartmentRepository $departmentRepository;
 
-    public function __construct(Employee $employee, EmployeeRepository $employeeRepository, DepartmentRepository $departmentRepository, DeptManagerRepository $deptManagerRepository, ChartBuilderInterface $chartBuilderInterface)
+    public function __construct(ManagerRegistry $registry, Employee $employee, EmployeeRepository $employeeRepository, DepartmentRepository $departmentRepository, DeptManagerRepository $deptManagerRepository, ChartBuilderInterface $chartBuilderInterface)
     {
+        $this->registry = $registry;
         $this->user = $employee;
         $this->chartbuilder = $chartBuilderInterface;
         $this->employeeRepository = $employeeRepository;
@@ -56,21 +61,21 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'app_admin')]
     public function index(DateTimeFormatter $timeFormater = null, ChartBuilderInterface $chartBuilder = null): Response
     {
-
         assert(null !== $timeFormater);
         assert(null !== $chartBuilder);
 
         $veterans = $this->employeeRepository->findVeterans();
         $arrivals = $this->employeeRepository->findArrivals();
+        $current = $this->employeeRepository->getCurrentDepartment($this->getUser());
 
 
-
-        foreach ($veterans as $veteran)
+        foreach ($veterans as $key => $veteran)
         {
-            $veteran['ago'] = $timeFormater->formatDiff(new DateTime($veteran['hire_date']), new DateTime('now'));
-            //dd($veteran['ago']);
-        }
+            $veterans[$key]['ago'] =  $timeFormater->formatDiff(new DateTime($veteran['hire_date']) , new DateTime('now'));
+            //dump($veteran[$key]['ago'])
 
+        }
+        //$currentDepartment = $this->employeeRepository->getCurrentDepartment($user->getId()),
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
 
         $url = $routeBuilder->setController(EmployeeCrudController::class)->generateUrl();
@@ -79,6 +84,7 @@ class DashboardController extends AbstractDashboardController
             'veterans' => $veterans,
             'arrivals' => $arrivals,
             'chart' => $this->createChart($chartBuilder),
+            'current' => $current
         ]);
     }
 
@@ -142,7 +148,7 @@ class DashboardController extends AbstractDashboardController
             $this->generateUrl('app_home')
         );
 
-        yield MenuItem::linkToLogout('Logout', 'fa fa-exit');
+        yield MenuItem::linkToLogout('Logout', 'fas fa-sign-out-alt');
     }
 
     public function configureCrud(): Crud
@@ -169,6 +175,9 @@ class DashboardController extends AbstractDashboardController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function configureUserMenu(UserInterface $user) : UserMenu
     {
         if (!$user instanceof Employee)
@@ -185,7 +194,7 @@ class DashboardController extends AbstractDashboardController
                    $this->generateUrl('app_employee_show',
                        [
                            'id' => $user->getId(),
-                           //'currentDepartment' => $this->employeeRepository->getCurrentDepartment($user->getId()),
+                            'current' => $this->employeeRepository->getCurrentDepartment($user->getId())
                        ]
                    )
                )
