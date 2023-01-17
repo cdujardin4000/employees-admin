@@ -11,8 +11,10 @@ class Title
 {
 
     #[ORM\Id]
-    #[ORM\Column]
-    private ?int $title_no = null;
+    #[ORM\Column(name: 'title_no', type: 'integer')]
+
+
+    private ?int $id = null;
 
     #[ORM\Column(length: 55)]
     private ?string $title = null;
@@ -20,6 +22,17 @@ class Title
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     public function getTitleNo(): ?int
     {

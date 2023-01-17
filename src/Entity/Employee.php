@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 
@@ -72,7 +73,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     public ?string $ago;
 
-    public ?string $current;
+    private ?string $current;
 
 
 
@@ -138,14 +139,26 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->titles = new ArrayCollection();
 
     }
+
+
     /**
 
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $managingStories;
-     **/
 
+    private function hashPassword($plaintextPassword) {
+        // hash the password (based on the security.yaml config for the $user class)
+        $hashedPassword = $passwordHasher->hashPassword(
+            $this,
+            $plaintextPassword
+        );
+
+        $entity->setPassword($hashedPassword);
+        dd($entity);
+        };
+    } **/
 
     public function getCurrent(): ?string
     {

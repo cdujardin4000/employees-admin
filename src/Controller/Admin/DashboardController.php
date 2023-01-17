@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Partner;
+use App\Entity\Title;
 use App\Repository\DepartmentRepository;
+use App\Repository\DeptEmpRepository;
 use App\Repository\DeptManagerRepository;
 use App\Repository\PartnerRepository;
 use DateTime;
@@ -42,6 +44,8 @@ class DashboardController extends AbstractDashboardController
     private EmployeeRepository $employeeRepository;
     private ChartBuilderInterface $chartBuilderInterface;
     private DepartmentRepository $departmentRepository;
+    private DeptEmpRepository $deptEmpRepository;
+
 
     public function __construct(
         ManagerRegistry $registry,
@@ -51,6 +55,7 @@ class DashboardController extends AbstractDashboardController
         DeptManagerRepository $deptManagerRepository,
         ChartBuilderInterface $chartBuilderInterface,
         PartnerRepository $partnerRepository,
+        DeptEmpRepository $deptEmpRepository
     )
     {
         $this->registry = $registry;
@@ -60,6 +65,7 @@ class DashboardController extends AbstractDashboardController
         $this->deptManagerRepository = $deptManagerRepository;
         $this->departmentRepository = $departmentRepository;
         $this->partnerRepository = $partnerRepository;
+        $this->deptEmpRepository = $deptEmpRepository;
     }
 
     /**
@@ -152,6 +158,25 @@ class DashboardController extends AbstractDashboardController
                     ),
             ]);
 
+
+        yield MenuItem::SubMenu(
+            'Titles',
+            'fas fa-sitemap'
+        )->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Title::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-plus',
+                Title::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
+        ]);
 
         yield MenuItem::subMenu(
             'Demands',
@@ -280,7 +305,7 @@ class DashboardController extends AbstractDashboardController
         }
 
         return parent::configureUserMenu($user)
-            ->setAvatarUrl($user->getAvatar())
+            ->setAvatarUrl($user?->getAvatar())
             ->addMenuItems([
                MenuItem::linkToUrl(
                    'My profile',
@@ -291,9 +316,18 @@ class DashboardController extends AbstractDashboardController
                             'current' => $this->employeeRepository->getCurrentDepartment($user->getId())
                        ]
                    )
-               )
-            ]
-        );
+               ),
+                MenuItem::linkToUrl(
+                    'My department',
+                    'fas-fa-building',
+                    $this->generateUrl('app_department_show',
+                        [
+                            //'dept_no' => $this->deptEmpRepository->find($user->get_emp_no()),
+                            'id' => $this->employeeRepository->getCurrentDepartment($user->getId())
+                        ]
+                    )
+                )
+            ]);
     }
 
     public function createChart(ChartBuilderInterface $chartBuilder): Chart

@@ -39,4 +39,22 @@ class DemandRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function getManagerDemands($emp_no): int
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+        $dep = $emp_no->getUser()->supervisions;
+        dd($dep);
+        $sql = "SELECT  *  FROM demands WHERE dept_no LIKE :emp_no AND to_date LIKE '9999-01-01'";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery([
+            'dept_no' => $emp_no,
+        ]);
+        //dd($resultSet->fetchOne());
+        return  (int)$resultSet->fetchOne();
+    }
+
 }

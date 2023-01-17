@@ -11,25 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    public function switchSecurity(Security $security): Response
-    {
-    // get the user to be authenticated
-       // $user = ...;
 
-            // log the user in on the current firewall
-            $security->login($user);
-
-            // if the firewall has more than one authenticator, you must pass it explicitly
-            // by using the name of built-in authenticators...
-            $security->login($user, 'form_login');
-            // ...or the service id of custom authenticators
-            $security->login($user, ExampleAuthenticator::class);
-
-            // you can also log in on a different firewall
-            $security->login($user, 'form_login', 'other_firewall');
-
-            // ... redirect the user to its account page for instance
-    }
 
     #[Route('/loginadmin', name: 'app_loginadmin')]
     public function index(AuthenticationUtils $authenticationUtils): Response
@@ -43,6 +25,15 @@ class SecurityController extends AbstractController
                 [
                      'last_username' => $lastUsername,
                      'error'         => $error,
+
+                    'translation_domain' => 'admin',
+
+                    'favicon_path' => '/favicon-admin.svg',
+
+                    'page_title' => 'ENCORE CORPS login',
+
+                    'csrf_token_intention' => 'authenticate',
+
 
                 ]
         );

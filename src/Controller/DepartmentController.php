@@ -62,7 +62,7 @@ class DepartmentController extends AbstractController
             'department' => $department,
             'nbEmployees' => $departmentRepository->getNbEmployees($department->getDeptNo()),
             'manager' => $departmentRepository->getManager($departmentRepository->getManagerNo($department->getDeptNo())),
-            'offers' => $departmentRepository->getOffers(),
+            'posts' => $departmentRepository->getAvailablePosts($department->getDeptNo()),
         ]);
     }
 

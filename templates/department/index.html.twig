@@ -11,8 +11,9 @@
                 {% for department in departments %}
                 <div class="col">
                     <div class="card shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ department.deptName }}</text></svg>
+                        <img  width="100%" height="315" src="/{{ department.deptImg }}"></img>
                         <div class="card-body">
+                            <h5 align="center">{{ department.deptName }}</h5>
                             <p class="card-text">{{ department.description }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
@@ -28,37 +29,7 @@
             </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Dept_name</th>
-                <th>Description</th>
-                <th>Address</th>
-                <th>Roi_url</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for department in departments %}
-            <tr>
-                <td>{{ department.deptNo }}</td>
-                <td>{{ department.deptName }}</td>
-                <td>{{ department.description }}</td>
-                <td>{{ department.address }}</td>
-                <td>{{ department.roiUrl }}</td>
-                <td>
-                    <a href="{{ path('app_department_show', { 'id': department.deptNo }) }}">show</a>
-                    <a href="{{ path('app_department_edit', { 'id': department.deptNo }) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_department_new') }}">Create new</a>
+
+    <a href="{{ path('app_home') }}">Back to home page</a>
 {% endblock %}

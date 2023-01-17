@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class DepartmentCrudController extends AbstractCrudController
 {
@@ -37,13 +38,21 @@ class DepartmentCrudController extends AbstractCrudController
         yield IdField::new('dept_no')
             ->onlyOnIndex();
 
+        yield ImageField::new('dept_img')
+            ->formatValue(static function ($value, ?Department $dept) {
+                return $dept?->getDeptImg();
+            })
+            ->setBasePath(self::DEPARTMENT_BASE_PATH)
+            ->setUploadDir(self::DEPARTMENT_UPLOAD_DIR)
+            ->setUploadedFileNamePattern(self::DEPARTMENT_BASE_PATH.'[slug]-[timestamp].[extension]');
+
         yield TextField::new('dept_name');
 
         yield TextAreaField::new('description')
             ->hideOnIndex()
             ->setFormTypeOptions([
                 'row_attr' => [
-                    'data-controller' => 'markdown',
+                    'data-controller' => 'snarkdown',
                 ],
                 'attr' => [
                     'data-markdown-target' => 'input',
@@ -52,17 +61,11 @@ class DepartmentCrudController extends AbstractCrudController
             ])
             ->setHelp('Preview:');
 
-        yield ImageField::new('dept_img')
-            ->formatValue(static function ($value, ?Department $dept) {
-                return $dept?->getDeptImg();
-            })
-            ->setBasePath(self::DEPARTMENT_BASE_PATH)
-            ->setUploadDir(self::DEPARTMENT_UPLOAD_DIR)
-            ->setUploadedFileNamePattern(self::DEPARTMENT_BASE_PATH.'[slug]-[timestamp].[extension]')
-            ->hideOnIndex();
-
 
         yield TextField::new('address');
+
+        yield TextField::new('roi_url');
+
     }
 
     public function configureCrud(Crud $crud): Crud

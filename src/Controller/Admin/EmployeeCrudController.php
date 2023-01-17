@@ -128,6 +128,11 @@ class EmployeeCrudController extends AbstractCrudController
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             return $queryBuilder;
         }
+        if ($this->isGranted('ROLE_MANAGER')) {
+            $dept = $this->getUser()?->getManagements();
+            //dd($dept);
+            return $queryBuilder;
+        }
         //dd($this->getDepartment);
         $queryBuilder->andWhere('entity.id = :id')->setParameter('id', $this->getUser()?->getId());
         return $queryBuilder;
