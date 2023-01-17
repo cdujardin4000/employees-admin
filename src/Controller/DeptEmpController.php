@@ -54,7 +54,7 @@ class DeptEmpController extends AbstractController
             $deptEmp->setToDate($to);
             $deptEmp->setEmployee($employeeRepository->find($empNo));
 
-
+            dd($deptEmp);
             $deptEmpRepository->save($deptEmp, true);
 
             return $this->redirectToRoute('app_employee_show', ['id' => $deptEmp->getEmpNo()], Response::HTTP_SEE_OTHER);

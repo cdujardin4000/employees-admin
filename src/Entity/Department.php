@@ -24,6 +24,9 @@ class Department
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $dept_img = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -35,6 +38,10 @@ class Department
     #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $employees;
 
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: DeptEmp::class,   fetch: "EAGER")]
+    #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
+    #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    private Collection $mutations;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: DptTitle::class)]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
@@ -51,7 +58,7 @@ class Department
         $this->managers = new ArrayCollection();
         $this->employees = new ArrayCollection();
         $this->offers = new ArrayCollection();
-
+        $this->mutations = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -94,9 +101,28 @@ class Department
         return $this->description;
     }
 
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDeptImg(): ?string
+    {
+        return $this->dept_img;
+    }
+
+    /**
+     * @param string|null $dept_img
+     */
+    public function setDeptImg(?string $dept_img): self
+    {
+        $this->dept_img = $dept_img;
 
         return $this;
     }
@@ -151,7 +177,10 @@ class Department
         return $this;
     }
 
-    
+    public function getMutations(): Collection
+    {
+        return $this->mutations;
+    }
 
     public function __toString() :string {
         return (string)$this->dept_name;

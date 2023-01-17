@@ -43,10 +43,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $avatar = null;
+    #[ORM\Column(name: 'avatar_url', length: 255, nullable: true)]
+    private ?string $avatarUrl = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email()]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -60,6 +61,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    private ?string $plainPassword = null;
+
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
@@ -68,6 +71,11 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     public ?string $ago;
+
+    public ?string $current;
+
+
+
 
     #[ORM\ManyToMany(targetEntity: Department::class, inversedBy:'employees', fetch: "EAGER")]
     #[ORM\JoinTable(name: 'dept_emp')]
@@ -106,7 +114,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $supervisions;
 
-    private string $current;
+
 
     /**
      * #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
@@ -228,36 +236,36 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getAvatarUrl(): ?string
     {
-        if (!$this->avatar) {
+        if (!$this->avatarUrl) {
             return null;
         }
-        if (str_contains($this->avatar, '/')) {
-            return $this->avatar;
+        if (str_contains($this->avatarUrl, '/')) {
+            return $this->avatarUrl;
         }
-        return sprintf('/assets/img/employees/%s', $this->avatar);
+        return sprintf('/assets/img/employees/%s', $this->avatarUrl);
     }
 
     public function setAvatarUrl(?string $avatarUrl): self
     {
-        $this->avatar = $avatarUrl;
+        $this->avatarUrl = $avatarUrl;
 
         return $this;
     }
 
     public function getAvatar(): ?string
     {
-        if (!$this->avatar) {
+        if (!$this->avatarUrl) {
             return null;
         }
-        if (str_contains($this->avatar, '/')) {
-            return $this->avatar;
+        if (str_contains($this->avatarUrl, '/')) {
+            return $this->avatarUrl;
         }
-        return sprintf('/assets/img/employees/%s', $this->avatar);
+        return sprintf('/assets/img/employees/%s', $this->avatarUrl);
     }
 
     public function setAvatar(?string $avatarUrl): self
     {
-        $this->avatar = $avatarUrl;
+        $this->avatarUrl = $avatarUrl;
 
         return $this;
     }
@@ -357,7 +365,21 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    /**
+     * @return string|null
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
 
+    /**
+     * @param string|null $plainPassword
+     */
+    public function setPlainPassword(?string $plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
     /**
      * @see UserInterface
      */

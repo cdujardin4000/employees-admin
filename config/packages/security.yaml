@@ -22,9 +22,15 @@ services:
             $localFactory: '@limiter.username_ip_login'
 
 security:
+    enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        # Use your user class name here
+        App\Entity\Employee:
+            algorithm: auto
+
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -33,10 +39,6 @@ security:
                 class: App\Entity\Employee
                 property: email
 
-        admin_user_provider:
-            entity:
-                class: App\Entity\Employee
-                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

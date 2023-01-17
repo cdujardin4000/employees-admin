@@ -27,12 +27,12 @@ class DeptEmp
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'affectations')]
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
-    private $employee;
-/**
+    private Employee $employee;
+
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'mutations')]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
-    private $department = null;
-**/
+    private ?Department $department = null;
+
     public function getEmpNo(): ?int
     {
         return $this->emp_no;
@@ -95,5 +95,17 @@ class DeptEmp
     public function getEmployee(): Employee
     {
         return $this->employee;
+    }
+
+    public function setDepartment(Department $department): self
+    {
+        $this->department = $department;
+
+        return $this;
+    }
+
+    public function getDepartment(): Department
+    {
+        return $this->department;
     }
 }

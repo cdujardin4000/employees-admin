@@ -2,8 +2,10 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Partner;
 use App\Repository\DepartmentRepository;
 use App\Repository\DeptManagerRepository;
+use App\Repository\PartnerRepository;
 use DateTime;
 use App\Entity\Demand;
 use App\Entity\Department;
@@ -41,14 +43,23 @@ class DashboardController extends AbstractDashboardController
     private ChartBuilderInterface $chartBuilderInterface;
     private DepartmentRepository $departmentRepository;
 
-    public function __construct(ManagerRegistry $registry, Employee $employee, EmployeeRepository $employeeRepository, DepartmentRepository $departmentRepository, DeptManagerRepository $deptManagerRepository, ChartBuilderInterface $chartBuilderInterface)
+    public function __construct(
+        ManagerRegistry $registry,
+        Employee $employee,
+        EmployeeRepository $employeeRepository,
+        DepartmentRepository $departmentRepository,
+        DeptManagerRepository $deptManagerRepository,
+        ChartBuilderInterface $chartBuilderInterface,
+        PartnerRepository $partnerRepository,
+    )
     {
         $this->registry = $registry;
         $this->user = $employee;
-        $this->chartbuilder = $chartBuilderInterface;
+        $this->chartbuilderInterface = $chartBuilderInterface;
         $this->employeeRepository = $employeeRepository;
         $this->deptManagerRepository = $deptManagerRepository;
         $this->departmentRepository = $departmentRepository;
+        $this->partnerRepository = $partnerRepository;
     }
 
     /**
@@ -59,23 +70,22 @@ class DashboardController extends AbstractDashboardController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/admin', name: 'app_admin')]
-    public function index(DateTimeFormatter $timeFormater = null, ChartBuilderInterface $chartBuilder = null): Response
+    public function index(DateTimeFormatter $timeFormater = null, ChartBuilderInterface $chartBuilderInterface = null): Response
     {
         assert(null !== $timeFormater);
-        assert(null !== $chartBuilder);
+        assert(null !== $chartBuilderInterface);
 
         $veterans = $this->employeeRepository->findVeterans();
         $arrivals = $this->employeeRepository->findArrivals();
-        $current = $this->employeeRepository->getCurrentDepartment($this->getUser());
+        $current = $this->employeeRepository->getCurrentDepartment($this->getUser()?->getId());
+        $partners = $this->partnerRepository->findAll();
 
 
         foreach ($veterans as $key => $veteran)
         {
             $veterans[$key]['ago'] =  $timeFormater->formatDiff(new DateTime($veteran['hire_date']) , new DateTime('now'));
-            //dump($veteran[$key]['ago'])
-
         }
-        //$currentDepartment = $this->employeeRepository->getCurrentDepartment($user->getId()),
+
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
 
         $url = $routeBuilder->setController(EmployeeCrudController::class)->generateUrl();
@@ -83,8 +93,9 @@ class DashboardController extends AbstractDashboardController
         return $this->render('admin/index.html.twig', [
             'veterans' => $veterans,
             'arrivals' => $arrivals,
-            'chart' => $this->createChart($chartBuilder),
-            'current' => $current
+            'chart' => $this->createChart($chartBuilderInterface),
+            'current' => $current,
+            'partners' => $partners
         ]);
     }
 
@@ -103,17 +114,44 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Content');
 
-        yield MenuItem::linkToCrud(
+        yield MenuItem::SubMenu(
             'Employees',
-            'fas fa-users',
-            Employee::class
-        );
+            'fas fa-users')->setSubItems([
+                    MenuItem::linkToCrud(
+                        'List',
+                        'fa fa-list',
+                        Employee::class
+                    ),
+                    MenuItem::linkToCrud(
+                        'Add',
+                        'fas fa-user-plus',
+                        Employee::class
+                    )->setAction(Crud::PAGE_NEW)
+                        ->setPermission(
+                        'ROLE_SUPER_ADMIN'
+                    ),
 
-        yield MenuItem::linkToCrud(
+                ]);
+
+        yield MenuItem::SubMenu(
             'Departments',
-            'fas fa-building',
-            Department::class
-        );
+            'fas fa-building'
+            )->setSubItems([
+                MenuItem::linkToCrud(
+                    'List',
+                    'fa fa-list',
+                    Department::class
+                ),
+                MenuItem::linkToCrud(
+                    'Add',
+                    'fas fa-plus',
+                    Department::class
+                )->setAction(Crud::PAGE_NEW)
+                    ->setPermission(
+                        'ROLE_SUPER_ADMIN'
+                    ),
+            ]);
+
 
         yield MenuItem::subMenu(
             'Demands',
@@ -139,14 +177,70 @@ class DashboardController extends AbstractDashboardController
                         ),
         ]);
 
-        yield MenuItem::section();
+        yield MenuItem::SubMenu(
+            'Partners',
+            'fas fa-user-friends')->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Partner::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-user-plus',
+                Partner::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
+        ]);
 
+        yield MenuItem::section();
 
         yield MenuItem::linktoUrl(
             'Back to the website',
             'fas fa-home',
             $this->generateUrl('app_home')
         );
+
+        yield MenuItem::section();
+
+        yield MenuItem::SubMenu(
+            'Know your friends',
+            'fas fa-user-friends')->setSubItems([
+            MenuItem::linkToUrl(
+                'Frontend Masters',
+                      '',
+                'https://frontendmasters.com'
+            ),
+            MenuItem::linkToUrl(
+                'SymfonyCasts',
+                '',
+                'https://symfonycasts.com/'
+            ),
+            MenuItem::linkToUrl(
+                'Webpack',
+                '',
+                'https://webpack.js.org/'
+            ),
+            MenuItem::linkToUrl(
+                'The valley of code',
+                '',
+                ' 	https://thevalleyofcode.com/'
+            ),
+            MenuItem::linkToUrl(
+                'Cedric Dujardin',
+                '',
+                'https://portfolio.cedricdujardin.com/'
+            ),
+            MenuItem::linkToUrl(
+                'Travesrsy Media',
+                '',
+                'https://www.traversymedia.com/'
+            ),
+        ]);
+
+        yield MenuItem::section();
 
         yield MenuItem::linkToLogout('Logout', 'fas fa-sign-out-alt');
     }

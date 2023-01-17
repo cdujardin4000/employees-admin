@@ -5,8 +5,19 @@
 {% block main %}
     <div class="row">
         <h3>Test charts</h3>
-        <div class="col-12">
+        <div class="col-6">
             {{ render_chart(chart) }}
+        </div>
+        <div class="col-6">
+            <h3>Our partners under the spot</h3>
+            <div class="row">
+                {% for partner in partners %}
+                    <div class="col-6">
+                        <a href="{{ path('app_partner_show', {'id': partner.id }) }}"><img src="{{ partner.logo }}" alt="LOGO" height="60" width="120"></a><br><br>
+
+                    </div>
+                {% endfor %}
+            </div>
         </div>
         <div class="col-6">
             <h3>Latest Arrivals</h3>
