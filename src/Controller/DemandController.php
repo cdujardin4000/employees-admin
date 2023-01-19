@@ -29,8 +29,12 @@ class DemandController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $demandRepository->save($demand, true);
 
+            //dd($demand);
+            $demand->setEmpNo($this->getUser()?->getId());
+
+           // dd($demand);
+            $demandRepository->save($demand, true);
             return $this->redirectToRoute('app_demand_index', [], Response::HTTP_SEE_OTHER);
         }
 

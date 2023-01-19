@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\DepartmentRepository;
 use App\Entity\Employee;
 use App\Form\EmployeeType;
 use App\Repository\EmployeeRepository;
@@ -63,14 +64,14 @@ class EmployeeController extends AbstractController
      * @throws \Doctrine\DBAL\Exception
      */
     #[Route('/{id}', name: 'app_employee_show', methods: ['GET'])]
-    public function show(Employee $employee, EmployeeRepository $employeeRepository): Response
+    public function show(Employee $employee, EmployeeRepository $employeeRepository, DepartmentRepository $departmentRepository): Response
     {
-
-        //dd($employee->getDepartments()[0]);
-        $employee->setCurrent($employeeRepository->getCurrentDepartment($employee));
+        $current = $employeeRepository->getCurrentDepartment($employee->getId());
+        $current = $departmentRepository->find($current);
 
         return $this->render('employee/show.html.twig', [
             'employee' => $employee,
+            'current' => $current
         ]);
     }
 

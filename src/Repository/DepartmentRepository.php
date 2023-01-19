@@ -115,22 +115,23 @@ class DepartmentRepository extends ServiceEntityRepository
 //
 //     *@return Department[] Returns an array of Department objects
 //
-    /**  public function getManagerDemands($emp_no): int
+    /**
+     * @throws Exception
+     */
+    public function getAffectationDemands($dept_no): array
     {
 
         $conn = $this->getEntityManager()->getConnection();
-        $dep = $emp_no->getUser()->supervisions;
-        dd($dep);
-        $sql = "SELECT  *  FROM demands WHERE dept_no LIKE :emp_no AND to_date LIKE '9999-01-01'";
+
+        $sql = "SELECT  *  FROM demands WHERE about=:dept_no";
 
         $stmt = $conn->prepare($sql);
 
-        $resultSet = $stmt->executeQuery([
-            'dept_no' => $emp_no,
-        ]);
-        //dd($resultSet->fetchOne());
-        return  (int)$resultSet->fetchOne();
-    }**/
+
+        return  $stmt->executeQuery([
+            'dept_no' => $dept_no,
+        ])->fetchAllAssociative();
+    }
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('d')

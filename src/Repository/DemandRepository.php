@@ -23,8 +23,9 @@ class DemandRepository extends ServiceEntityRepository
 
     public function save(Demand $entity, bool $flush = false): void
     {
+        //dd($entity);
         $this->getEntityManager()->persist($entity);
-
+        //dd($entity);
         if ($flush) {
             $this->getEntityManager()->flush();
         }

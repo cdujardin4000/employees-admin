@@ -85,12 +85,17 @@ class DashboardController extends AbstractDashboardController
         $arrivals = $this->employeeRepository->findArrivals();
         $current = $this->employeeRepository->getCurrentDepartment($this->getUser()?->getId());
         $partners = $this->partnerRepository->findAll();
-
+        $departments = $this->departmentRepository->findAll();
 
         foreach ($veterans as $key => $veteran)
         {
             $veterans[$key]['ago'] =  $timeFormater->formatDiff(new DateTime($veteran['hire_date']) , new DateTime('now'));
         }
+
+        /**foreach ($departments as $department)
+        {
+            $department->setCurrentManager($this->departmentRepository->getManager($this->departmentRepository->getManagerNo($department['dept_no'])));
+        }**/
 
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
 
@@ -101,7 +106,8 @@ class DashboardController extends AbstractDashboardController
             'arrivals' => $arrivals,
             'chart' => $this->createChart($chartBuilderInterface),
             'current' => $current,
-            'partners' => $partners
+            'partners' => $partners,
+            'departments' => $departments,
         ]);
     }
 
@@ -198,7 +204,7 @@ class DashboardController extends AbstractDashboardController
                         )->setPermission(
                             'ROLE_MANAGER'
                         )->setController(
-                            Demand2CrudController::class
+                            DemandCrudController::class
                         ),
         ]);
 

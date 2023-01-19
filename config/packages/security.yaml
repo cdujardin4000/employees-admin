@@ -23,6 +23,7 @@ services:
 
 security:
     enable_authenticator_manager: true
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -30,6 +31,9 @@ security:
         App\Entity\Employee:
             algorithm: auto
 
+    # https://symfony.com/bundles/EasyAdminBundle/current/security.html
+    access_decision_manager:
+        strategy: unanimous
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:

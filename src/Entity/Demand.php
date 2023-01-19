@@ -15,6 +15,27 @@ class Demand
     #[ORM\Column]
     private ?int $id = null;
 
+
+    #[ORM\Column]
+    private ?int $emp_no = null;
+
+    /**
+     * @return int|null
+     */
+    public function getEmpNo(): ?int
+    {
+        return $this->emp_no;
+    }
+
+    /**
+     * @param int|null $emp_no
+     */
+    public function setEmpNo(?int $emp_no): void
+    {
+        $this->emp_no = $emp_no;
+    }
+
+
     #[ORM\Column(length: 15)]
     private ?string $type = null;
 

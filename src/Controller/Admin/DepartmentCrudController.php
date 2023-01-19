@@ -56,7 +56,7 @@ class DepartmentCrudController extends AbstractCrudController
                 ],
                 'attr' => [
                     'data-markdown-target' => 'input',
-                    'data-action' => 'markdown#render',
+                    'data-action' => 'snarkdown#render',
                 ],
             ])
             ->setHelp('Preview:');

@@ -32,6 +32,8 @@ class Department
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roi_url = null;
 
+    public ?array $currentManager = null;
+
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'departments')]
     #[ORM\JoinTable(name: 'dept_emp')]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
@@ -149,6 +151,18 @@ class Department
         $this->roi_url = $roi_url;
 
         return $this;
+    }
+
+    public function setCurrentManager($currentManager): self
+    {
+        $this->currentManager = $currentManager;
+
+        return $this;
+    }
+
+    public function getCurrentManager()
+    {
+        return $this->currentManager;
     }
 
     public function getEmployees(): Collection

@@ -2,7 +2,6 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -72,8 +71,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     public ?string $ago;
-
-    private ?string $current;
+    #[ORM\Column]
+    public ?string $current;
 
 
 
@@ -115,6 +114,9 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $supervisions;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Mission::class)]
+    private Collection $missions;
+
 
 
     /**
@@ -137,6 +139,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         $this->demands = new ArrayCollection();
         $this->salaries = new ArrayCollection();
         $this->titles = new ArrayCollection();
+        $this->missions = new ArrayCollection();
 
     }
 
@@ -160,17 +163,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         };
     } **/
 
-    public function getCurrent(): ?string
-    {
-        return $this->current;
-    }
 
-    public function setCurrent($current): self
-    {
-        $this->current = $current;
-
-        return $this;
-    }
 
     public function get_emp_no(): ?int
     {
@@ -498,6 +491,42 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->managements;
     }
 
+    /**
+     * @return Collection<int, Mission>
+     */
+    public function getMissions(): Collection
+    {
+        return $this->missions;
+    }
+
+    public function addMission(Mission $mission): self
+    {
+        if (!$this->missions->contains($mission)) {
+            $this->missions->add($mission);
+            $mission->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMission(Mission $mission): self
+    {
+        if ($this->missions->removeElement($mission)) {
+            // set the owning side to null (unless already changed)
+            if ($mission->getOwner() === $this) {
+                $mission->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function setCurrent(Department $current) :self
+    {
+        $this->current = $current;
+
+        return $this;
+    }
 
 
 }

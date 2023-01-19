@@ -21,46 +21,49 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
                         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+
                     </a>
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                         <li>
                             <a href="{{ path('app_home') }}" class="nav-link text-secondary">
-                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>
                                 Home
                             </a>
                         </li>
                         <li>
                             <a href="{{ path('app_department_index') }}" class="nav-link text-white">
-                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
                                 Departments
                             </a>
                         </li>
                         <li>
                             <a href="#" class="nav-link text-white">
-                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
                                 Women at work
                             </a>
                         </li>
                         <li>
                             <a href="#" class="nav-link text-white">
-                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
                                 Partners
                             </a>
                         </li>
-                        <li>
+
                         {% if is_granted('ROLE_USER') %}
                         <li>
-                            <a href="{{ path('app_admin') }}" class="nav-link text-white">
-                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#speedometer2"/></svg>
+                            <a href="{{ path('app_admin') }}" class="btn btn-danger my-btn">
                                 Admin
                              </a>
                         </li>
                         <li>
-                            <a href="{{ path('app_employee_show', { id : app.user.id }) }}" class="nav-link text-white">
-                                <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>Profile
+                            <a href="{{ path('app_employee_show', { id : app.user.id }) }}" class="btn btn-info my-btn">
+                                Profile
                             </a>
                         </li>
+                        {% endif %}
+                        {% if app.user %}
+                            <li>
+                                <a href="{{ path('app_mission_list') }}" class="btn btn-warning my-btn">
+                                    My missions
+                                </a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>
@@ -69,9 +72,11 @@
         {% if app.request.get('_route') != 'app_login' and app.request.get('_route') != 'app_register' and app.request.get('_route') != 'app_loginadmin' %}
         <div class="px-3 py-2 border-bottom mb-3">
             <div class="container d-flex flex-wrap  space-between">
-                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-                </form>
+                <div class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+                    {%if app.user %}
+                        <p>{{ app.user.current }}</p>
+                    {% endif %}
+                </div>
                 {% if app.user %}
                     <div class="mb-3">
                         <p>You are logged in as {{ app.user.userIdentifier }} - your role is: {{ app.user.roles[0] }}. <a id ="logout" href="{{ path('app_logout') }}">Logout</a></p>

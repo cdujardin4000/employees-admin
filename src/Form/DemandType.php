@@ -23,17 +23,15 @@ class DemandType extends AbstractType
     {
 
         $builder
-            ->add('type', ChoiceType::class, [
-                'choices' =>  [
-                    'reaffectation' => 'reaffectation',
-                    'augmentation' => 'augmentation',
-                ]
-            ])
 
-            ->add('employee', HiddenType::class,[
-                    'data'  => $_GET['id'],
-           ]);
-           $builder->addEventSubscriber(new ChoiceFieldSubscriber());
+
+            ->add('type', ChoiceType::class, [
+            'choices' =>  [
+                'reaffectation' => 'reaffectation',
+                'augmentation' => 'augmentation',
+            ]
+        ]);
+        $builder->addEventSubscriber(new ChoiceFieldSubscriber());
     }
 
 

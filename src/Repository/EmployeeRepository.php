@@ -138,18 +138,25 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
     /**
      * @throws Exception
      */
-    public function getCurrentDepartment($id) : string
+    public function getCurrentDepartment(int $emp_no) : string
     {
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = "SELECT dept_no FROM current_dept_emp WHERE emp_no='$id'";
+        $sql = "SELECT cde.dept_no  FROM current_dept_emp cde INNER JOIN departments d ON cde.dept_no = d.dept_no WHERE emp_no=:emp_no AND to_date='9999-01-01'";
 
         //dd($sql);
+        $stmt = $conn->prepare($sql);
 
-        $resultSet = $conn->executeQuery($sql)->fetchOne();
+        $resultSet  = $stmt->executeQuery([
+            'emp_no' => $emp_no,
+        ]);
+
+
         //dd($resultSet);
-        return  (string)$resultSet;
+        return  (string)$resultSet->fetchOne();
     }
 
 }
+
+

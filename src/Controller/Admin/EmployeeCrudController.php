@@ -154,8 +154,8 @@ class EmployeeCrudController extends AbstractCrudController
         yield TextField::new('fullName')
             ->hideOnForm();
 
-        yield TextField::new('current')
-            ->hideOnForm();
+       // yield TextField::new('current')
+           // ->hideOnForm();
 
         yield DateField::new('birth_date');
 
@@ -219,8 +219,8 @@ class EmployeeCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
-            //->setEntityPermission('ADMIN_USER_EDIT')
-            //->setEntityPermission('ADMIN_USER_SHOW')
+           // ->setEntityPermission('ADMIN_USER_EDIT')
+          //  ->setEntityPermission('ADMIN_USER_SHOW')
             ->showEntityActionsInlined()
             ->setDefaultSort([
                 'id' => 'ASC',

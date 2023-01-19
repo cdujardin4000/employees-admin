@@ -1,4 +1,0 @@
-
-database:
-    type: postgresql:14
-    disk: 1024
