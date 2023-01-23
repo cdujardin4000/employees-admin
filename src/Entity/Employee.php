@@ -2,6 +2,7 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,14 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
 
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[ORM\Table('employees')]
-class Employee implements UserInterface, PasswordAuthenticatedUserInterface
+class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue()]
@@ -74,6 +73,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     public ?string $current;
 
+    public ?string $currentTitle;
 
 
 
@@ -114,7 +114,8 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $supervisions;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Mission::class)]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Mission::class)]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $missions;
 
 
@@ -491,6 +492,20 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->managements;
     }
 
+    public function setCurrent(Department $current) :self
+    {
+        $this->current = $current;
+
+        return $this;
+    }
+
+    public function setCurrentTitle(Title $currentTitle) :self
+    {
+        $this->currentTitle = $currentTitle;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Mission>
      */
@@ -503,7 +518,7 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->missions->contains($mission)) {
             $this->missions->add($mission);
-            $mission->setOwner($this);
+            $mission->setEmployee($this);
         }
 
         return $this;
@@ -513,20 +528,12 @@ class Employee implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->missions->removeElement($mission)) {
             // set the owning side to null (unless already changed)
-            if ($mission->getOwner() === $this) {
-                $mission->setOwner(null);
+            if ($mission->getEmployee() === $this) {
+                $mission->setEmployee(null);
             }
         }
 
         return $this;
     }
-
-    public function setCurrent(Department $current) :self
-    {
-        $this->current = $current;
-
-        return $this;
-    }
-
 
 }

@@ -60,7 +60,7 @@
                         {% endif %}
                         {% if app.user %}
                             <li>
-                                <a href="{{ path('app_mission_list') }}" class="btn btn-warning my-btn">
+                                <a href="{{ path('app_mission_list', { id : app.user.id }) }}" class="btn btn-warning my-btn">
                                     My missions
                                 </a>
                             </li>
@@ -74,12 +74,16 @@
             <div class="container d-flex flex-wrap  space-between">
                 <div class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
                     {%if app.user %}
-                        <p>{{ app.user.current }}</p>
+                        <div class="d-inline p-2 bg-primary text-white">{{ app.user.firstName }} {{ app.user.lastName }}</div>
+                        <div class="d-inline p-2 bg-dark text-white">{{ app.user.current }}</div>
+                        {%if app.user.current %}
+                            <div class="d-inline p-2 text-bg-info text-white">{{ app.user.currentTitle }}</div>
+                        {% endif %}
                     {% endif %}
                 </div>
                 {% if app.user %}
                     <div class="mb-3">
-                        <p>You are logged in as {{ app.user.userIdentifier }} - your role is: {{ app.user.roles[0] }}. <a id ="logout" href="{{ path('app_logout') }}">Logout</a></p>
+                        <a type="button" class="btn btn-outline-danger" id ="logout" href="{{ path('app_logout') }}">Logout</a>
                     </div>
                 {% else %}
                 <div class="text-end">

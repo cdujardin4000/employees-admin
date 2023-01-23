@@ -86,6 +86,12 @@ class DashboardController extends AbstractDashboardController
         $current = $this->employeeRepository->getCurrentDepartment($this->getUser()?->getId());
         $partners = $this->partnerRepository->findAll();
         $departments = $this->departmentRepository->findAll();
+        $departmentRepository = $this->departmentRepository;
+
+        foreach ($departments as  $department)
+        {
+            $departments['manager'] =  $departmentRepository->getManager($departmentRepository->getManagerNo($department->getDeptNo()));
+        }
 
         foreach ($veterans as $key => $veteran)
         {

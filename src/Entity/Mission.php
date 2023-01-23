@@ -5,49 +5,49 @@ namespace App\Entity;
 use App\Repository\MissionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
 
 #[ORM\Entity(repositoryClass: MissionRepository::class)]
-#[ORM\Table('missions')]
+#[ORM\Table(name: 'missions')]
 class Mission
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name:"id", type:"integer" )]
-    private ?int $missionId = null;
+    #[ORM\Column]
+    private ?int $mission_id = null;
 
-
-    #[ORM\Column(name:"emp_no", type:"integer" ,nullable: true)]
-    private ?int $id = null;
+    #[ORM\Column(name: 'emp_no', type: 'integer', nullable: true)]
+    private ?int $id;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dueDate = null;
+    private ?\DateTimeInterface $due_date = null;
 
     #[ORM\Column(length: 15)]
     private ?string $status = null;
 
-
     #[ORM\ManyToOne(inversedBy: 'missions')]
-    #[JoinColumn(name: 'emp_no', referencedColumnName: 'id')]
-    private ?Employee $owner = null;
+    #[ORM\JoinColumn(name : 'emp_no', referencedColumnName : 'id')]
+    private ?Employee $employee = null;
+
+    //#[ORM\ManyToOne(inversedBy: 'missions')]
+    //private ?int $employee = null;
+
+
+    public function getMission_id(): ?int
+    {
+        return $this->mission_id;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-
-    public function getmissionId(): ?int
+    public function setId(?int $id): self
     {
-        return $this->missionId;
-    }
-
-    public function setMissionId(?int $missionId): self
-    {
-        $this->missionId = $missionId;
+        $this->id = $id;
 
         return $this;
     }
@@ -66,12 +66,12 @@ class Mission
 
     public function getDueDate(): ?\DateTimeInterface
     {
-        return $this->dueDate;
+        return $this->due_date;
     }
 
-    public function setDueDate(\DateTimeInterface $dueDate): self
+    public function setDueDate(\DateTimeInterface $due_date): self
     {
-        $this->dueDate = $dueDate;
+        $this->due_date = $due_date;
 
         return $this;
     }
@@ -88,14 +88,14 @@ class Mission
         return $this;
     }
 
-    public function getOwner(): ?Employee
+    public function getEmployee(): int
     {
-        return $this->owner;
+        return $this->employee;
     }
 
-    public function setOwner(?Employee $owner): self
+    public function setEmployee(?Employee $employee): self
     {
-        $this->owner = $owner;
+        $this->employee = $employee;
 
         return $this;
     }

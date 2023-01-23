@@ -157,6 +157,28 @@ class EmployeeRepository extends ServiceEntityRepository implements PasswordUpgr
         return  (string)$resultSet->fetchOne();
     }
 
+    /**
+     * @throws Exception
+     */
+    public function getCurrentTitle(int $emp_no) : string
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "SELECT et.title_no  FROM emp_title et INNER JOIN titles t ON t.title_no = t.title_no WHERE emp_no=:emp_no AND to_date='9999-01-01'";
+
+        //dd($sql);
+        $stmt = $conn->prepare($sql);
+
+        $resultSet  = $stmt->executeQuery([
+            'emp_no' => $emp_no,
+        ]);
+
+
+        //dd($resultSet);
+        return  (string)$resultSet->fetchOne();
+    }
+
 }
 
 

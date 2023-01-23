@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DepartmentRepository;
+use ArrayAccess;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,7 +33,7 @@ class Department
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $roi_url = null;
 
-    public ?array $currentManager = null;
+    public ?array $manager = null;
 
     #[ORM\ManyToMany(targetEntity: Employee::class, mappedBy: 'departments')]
     #[ORM\JoinTable(name: 'dept_emp')]
@@ -160,9 +161,9 @@ class Department
         return $this;
     }
 
-    public function getCurrentManager()
+    public function getManager(): ?array
     {
-        return $this->currentManager;
+        return $this->manager;
     }
 
     public function getEmployees(): Collection
@@ -198,5 +199,25 @@ class Department
 
     public function __toString() :string {
         return (string)$this->dept_name;
+    }
+
+    public function offsetExists($offset)
+    {
+        // TODO: Implement offsetExists() method.
+    }
+
+    public function offsetGet($offset)
+    {
+        // TODO: Implement offsetGet() method.
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        // TODO: Implement offsetSet() method.
+    }
+
+    public function offsetUnset($offset)
+    {
+        // TODO: Implement offsetUnset() method.
     }
 }
