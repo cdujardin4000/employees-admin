@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Mission;
 use App\Entity\Partner;
 use App\Entity\Title;
 use App\Repository\DepartmentRepository;
@@ -87,11 +88,7 @@ class DashboardController extends AbstractDashboardController
         $partners = $this->partnerRepository->findAll();
         $departments = $this->departmentRepository->findAll();
         $departmentRepository = $this->departmentRepository;
-
-        foreach ($departments as  $department)
-        {
-            $departments['manager'] =  $departmentRepository->getManager($departmentRepository->getManagerNo($department->getDeptNo()));
-        }
+        $employeeRepository = $this->employeeRepository;
 
         foreach ($veterans as $key => $veteran)
         {
@@ -114,6 +111,8 @@ class DashboardController extends AbstractDashboardController
             'current' => $current,
             'partners' => $partners,
             'departments' => $departments,
+            'departmentRepository' => $departmentRepository,
+            'employeeRepository' => $employeeRepository,
         ]);
     }
 
@@ -212,6 +211,25 @@ class DashboardController extends AbstractDashboardController
                         )->setController(
                             DemandCrudController::class
                         ),
+        ]);
+
+        yield MenuItem::SubMenu(
+            'Missions',
+            'fas fa-bullseye'
+        )->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Mission::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-plus',
+                Mission::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
         ]);
 
         yield MenuItem::SubMenu(
@@ -342,9 +360,9 @@ class DashboardController extends AbstractDashboardController
             ]);
     }
 
-    public function createChart(ChartBuilderInterface $chartBuilder): Chart
+    public function createChart(ChartBuilderInterface $chartBuilderInterface): Chart
     {
-        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart = $chartBuilderInterface->createChart(Chart::TYPE_LINE);
         $chart->setData([
             'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
             'datasets' => [

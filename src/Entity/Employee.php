@@ -114,7 +114,7 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $supervisions;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Mission::class)]
-    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'id')]
     private Collection $missions;
 
 
@@ -525,11 +525,9 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeMission(Mission $mission): self
     {
-        if ($this->missions->removeElement($mission)) {
-            // set the owning side to null (unless already changed)
-            if ($mission->getEmployee() === $this) {
-                $mission->setEmployee(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->missions->removeElement($mission) && $mission->getEmployee() === $this) {
+            $mission->setEmployee(null);
         }
 
         return $this;

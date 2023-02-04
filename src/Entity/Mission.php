@@ -28,7 +28,7 @@ class Mission
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'missions')]
-    #[ORM\JoinColumn(name : 'emp_no', referencedColumnName : 'id')]
+    #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private ?Employee $employee = null;
 
     //#[ORM\ManyToOne(inversedBy: 'missions')]
@@ -39,7 +39,10 @@ class Mission
     {
         return $this->mission_id;
     }
-
+    public function getMissionId(): ?int
+    {
+        return $this->mission_id;
+    }
     public function getId(): ?int
     {
         return $this->id;

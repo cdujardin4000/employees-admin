@@ -4,157 +4,117 @@
 
 {% block body %}
     <h1>Employee</h1>
-
-{{ dump(employee) }}
     {#if app.request.get('_route').contains('app.user.id') #}
     <h2>Profile</h2>
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
-            <div class="col-md-3 border-right">
+            <div class="col-md-5 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="/{{ employee.photo }}"><span class="font-weight-bold">{{ employee.firstName }}</span><span class="text-black-50">{{ employee.email }}</span><span> </span></div>
             </div>
-            <div class="col-md-5 border-right">
+            <div class="col-md-7 border-right">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Profile Settings</h4>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-6"><label class="labels">First name</label><input type="text" class="form-control" placeholder="first name" value="{{ employee.firstName }}"></div>
-                        <div class="col-md-6"><label class="labels">Last name</label><input type="text" class="form-control" value="{{ employee.lastName }}" placeholder="last name"></div>
+                        <div class="col-md-6">
+                            <label class="labels">
+                                Firstname
+                            </label>
+                            <p>{{ employee.firstName }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">
+                                Lastname
+                            </label>
+                            <p>{{ employee.lastName }}</p>
+                        </div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12"><label class="labels">Birth date</label><input type="text" class="form-control" placeholder="Birth date" value="{{ employee.birthDate|date('Y-m-d') }}"></div>
-                        <div class="col-md-12"><label class="labels">Hire date</label><input type="text" class="form-control" placeholder="Hire date" value="{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}"></div>
-                        <div class="col-md-12"><label class="labels">Gender</label><input type="text" class="form-control" placeholder="gender" value="{{ employee.gender }}"></div>
-                        <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control" placeholder="{{ employee.email }}" value="{{ employee.email }}"></div>
-                        <div class="col-md-12"><label class="labels">Current Department</label><input type="text" class="form-control" placeholder="{{ current }}" value=""></div>
+                        <div class="col-md-4">
+                            <label class="labels">
+                                Birth date
+                            </label>
+                            <p>{{ employee.birthDate|date('Y-m-d') }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="labels">
+                                Hire date
+                            </label>
+                            <p>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="labels">
+                                Gender
+                            </label>
+                            <p>{{ employee.gender }}</p>
+                        </div>
                     </div>
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-3 py-5">
-                    <h4 class="text-right">Career</h4>
-                    <div class="col-md-12">
-                            <tr>
-                                <th>Demands</th>
-                                <td>
-                                    {% for demand in employee.demands %}
-                                        <p>{{ demand.type }} : {{ demand.about }} - {{ demand.reviewed == false ? '<div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Dismiss</button></div>' : demand.status == 1 ? 'Accepted' : 'Rejected' }}</p>
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                    </div> <br>
-                    <div class="mt-5 text-center"><a class="btn btn-primary" href="{{ path('app_demand_new', {'id' : employee.id}) }}">New demand</a></div>
-                    <div class="col-md-12">
-                        {% if employee.affectations|length != 0 %}
-                            <tr>
-                                <th>Affectations</th>
-                                <td>
-                                    {% for affectation in employee.affectations %}
-                                        <p>{{ affectation.deptNo }} - From: {{ affectation.fromDate|date('Y-m-d')  }} To: {{ affectation.toDate|date('Y-m-d')  }}</p>
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                        {%  endif %}
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">
+                                Email
+                            </label>
+                            <p>{{ employee.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">
+                                Current Department
+                            </label>
+                            <p>{{ current }}</p>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        {% if employee.salaries|length != 0 %}
-                        <tr>
-                            <th>Salaries</th>
-                            <td>
-                                {% for salary in employee.salaries %}
-                                    <p>{{ salary.salary }} - From: {{ salary.fromDate|date('Y-m-d')  }} To: {{ salary.toDate|date('Y-m-d')  }}</p>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endif %}
-                    </div>
+
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Edit Profile</button></div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-    </div>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ employee.id }}</td>
-            </tr>
-            <tr>
-                <th>First_name</th>
-                <td>{{ employee.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Last_name</th>
-                <td>{{ employee.lastName }}</td>
-            </tr>
-            <tr>
-                <th>Birth_date</th>
-                <td>{{ employee.birthDate ? employee.birthDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Gender</th>
-                <td>{{ employee.gender }}</td>
-            </tr>
-            <tr>
-                <th>Photo</th>
-                <td>{{ employee.photo |default('not found') }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ employee.email }}</td>
-            </tr>
-            <tr>
-                <th>Hire_date</th>
-                <td>{{ employee.hireDate ? employee.hireDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ employee.roles ? employee.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ employee.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <h2>Career History</h2>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Demands</th>
-                <td>
-                    {% for demand in employee.demands %}
-                    <p>{{ demand.type }} : {{ demand.about }} - {{ demand.reviewed == false ? 'In review' : demand.status == 1 ? 'Accepted' : 'Rejected' }}</p>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <th>Affectations</th>
-                <td>
+        <h2 class="text-right">Career Resume</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <h3>Demands</h3>
+                {% for demand in employee.demands %}
+                    <p>{{ demand.type }} : {{ demand.about }} - {{ demand.reviewed == false ? '<div class="mt-5 text-center"><button class="btn btn-primary btn-sm profile-button" type="button">Dismiss</button></div>' : demand.status == 1 ? 'Accepted' : 'Rejected' }}</p>
+                {% endfor %}
+                <div class="mt-5 text-center">
+                    <a class="btn btn-primary btn-sm" href="{{ path('app_demand_new', {'id' : employee.id}) }}">New demand</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h3>Affectations</h3>
+                {% if employee.affectations|length != 0 %}
                     {% for affectation in employee.affectations %}
-                    <p>{{ affectation.deptNo }} - From: {{ affectation.fromDate|date('Y-m-d')  }} To: {{ affectation.toDate|date('Y-m-d')  }}</p>
+                        <p>{{ affectation.deptNo }} - From: {{ affectation.fromDate|date('Y-m-d')  }} To: {{ affectation.toDate|date('Y-m-d')  }}</p>
                     {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <th>Salaries</th>
-                <td>
+                {%  endif %}
+            </div>
+            <div class="col-md-3">
+                <h3>Salaries</h3>
+                {% if employee.salaries|length != 0 %}
                     {% for salary in employee.salaries %}
                         <p>{{ salary.salary }} - From: {{ salary.fromDate|date('Y-m-d')  }} To: {{ salary.toDate|date('Y-m-d')  }}</p>
                     {% endfor %}
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_employee_index') }}">back to list</a>
-
-    <a href="{{ path('app_employee_edit', {'id': employee.id}) }}">edit</a>
-
-    {{ include('employee/_delete_form.html.twig') }}
-
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <h3>Missions</h3>
+                {% if employee.missions|length != 0 %}
+                    {% for mission in employee.missions %}
+                        <p>{{ mission.description }} : {{ mission.status }} - {{ mission.status == 'ongoing' ? '<div class="mt-5 text-center"><button class="btn btn-primary btn-sm profile-button" type="button">Terminate</button></div>' : '' }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <h3>Managements</h3>
+                {% if employee.managements|length != 0 %}
+                    {% for management in employee.managements %}
+                        {{ management }}
+                        <p>{{ management.deptNo }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
