@@ -117,7 +117,11 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'id')]
     private Collection $missions;
 
-
+    #[ORM\ManyToMany(targetEntity: Car::class, mappedBy: 'employees', indexBy: 'emp_no')]
+    #[ORM\JoinTable(name: 'cars_emp')]
+    #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'car_id', referencedColumnName: 'car_id')]
+    private Collection $cars;
 
     /**
      * #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
@@ -140,6 +144,7 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
         $this->salaries = new ArrayCollection();
         $this->titles = new ArrayCollection();
         $this->missions = new ArrayCollection();
+        $this->cars = new ArrayCollection();
 
     }
 
@@ -531,6 +536,22 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getCars(): ArrayCollection|Collection
+    {
+        return $this->cars;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $cars
+     */
+    public function setCars(ArrayCollection|Collection $cars): void
+    {
+        $this->cars = $cars;
     }
 
 }

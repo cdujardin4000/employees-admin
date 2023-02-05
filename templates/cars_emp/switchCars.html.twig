@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CarsEmp index{% endblock %}
+
+{% block body %}
+    <h1>Switch cars</h1>
+    <form action="{{ path('app_cars_emp_switchCars') }}" method="post">
+        <input type="hidden" name="action" value="submit[]" />
+        {# generate strtoken #}
+        {% set strToken = 'switchCars-action' %}
+        <input type="hidden" name="emp_no" value="{{ app.user.id }}"/>
+        <input type="hidden" name="token" value="{{ csrf_token(strToken) }}"/>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Model</th>
+                <th>switch</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cars_emp in cars_emps %}
+                {#{% set strToken = app.user.id ~ 'switchCars-action' ~ mission.mission_id %}#}
+                {% set action = 'switchCars' %}
+                {% set value = cars_emp.carId ~ '-' ~ cars_emp.empNo  %}
+                {% set idSubmit = value ~ '-submit'  %}
+                <tr>
+                    <td>{{ employees.find(cars_emp.empNo) }}</td>
+                    <td>{{ cars.find(cars_emp.carId) }}</td>
+                    <td>
+                        <label for="{{ idSubmit }}">
+                            <input id="{{ idSubmit }}" class="{{ action }}" type="checkbox" name="submit[]" value="{{ value }}">
+                        </label>
+                        <a href="{{ path(
+                            'app_car_show',{
+                                'id': cars_emp.carId,
+                            }
+                        ) }}">show</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <button type="submit">Switch</button>
+        </div>
+    </form>
+{% endblock %}

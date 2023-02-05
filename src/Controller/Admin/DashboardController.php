@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Car;
 use App\Entity\Mission;
 use App\Entity\Partner;
 use App\Entity\Title;
@@ -211,6 +212,25 @@ class DashboardController extends AbstractDashboardController
                         )->setController(
                             DemandCrudController::class
                         ),
+        ]);
+
+        yield MenuItem::SubMenu(
+            'Cars',
+            'fas fa-car'
+        )->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Car::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-plus',
+                Car::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
         ]);
 
         yield MenuItem::SubMenu(

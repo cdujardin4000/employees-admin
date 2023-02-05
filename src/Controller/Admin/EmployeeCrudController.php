@@ -41,7 +41,7 @@ class EmployeeCrudController extends AbstractCrudController
     public const EMPLOYEE_BASE_PATH = 'assets/img/employees/';
     public const EMPLOYEE_UPLOAD_DIR = 'public/uploads/employees/';
     public const EMPLOYEE_PATH = 'uploads/employees/';
-    //public const EMP_TO_DEPT_ACTION = 'Save and assign department';
+    public const EMP_TO_DEPT_ACTION = 'Save and assign department';
 
 
     public function __construct(
@@ -53,9 +53,8 @@ class EmployeeCrudController extends AbstractCrudController
         return Employee::class;
     }
 
-    /** public function configureActions(Actions $actions): Actions
+    public function configureActions(Actions $actions): Actions
     {
-
         $assign = Action::new(self::EMP_TO_DEPT_ACTION)
             ->linkToRoute('app_dept_emp_new')
             ->setCssClass('btn btn-info');
@@ -64,9 +63,6 @@ class EmployeeCrudController extends AbstractCrudController
             ->add(Crud::PAGE_NEW, $assign)
             ->reorder(Crud::PAGE_NEW, [self::EMP_TO_DEPT_ACTION, Action::SAVE_AND_RETURN]);
     }
-
-
-
 
     public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
@@ -99,7 +95,7 @@ class EmployeeCrudController extends AbstractCrudController
             $hash = $this->userPasswordHasher->hashPassword($entitydto, $password);
             $form->getData()->setPassword($hash);
         };
-    }**/
+    }
 
 
 

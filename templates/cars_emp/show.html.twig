@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CarsEmp{% endblock %}
+
+{% block body %}
+    <h1>CarsEmp</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cars_emp.id }}</td>
+            </tr>
+            <tr>
+                <th>Cars_emp_id</th>
+                <td>{{ cars_emp.carsEmpId }}</td>
+            </tr>
+            <tr>
+                <th>Emp_no</th>
+                <td>{{ cars_emp.empNo }}</td>
+            </tr>
+            <tr>
+                <th>Car_id</th>
+                <td>{{ cars_emp.carId }}</td>
+            </tr>
+            <tr>
+                <th>From_date</th>
+                <td>{{ cars_emp.fromDate ? cars_emp.fromDate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cars_emp_index') }}">back to list</a>
+
+    <a href="{{ path('app_cars_emp_edit', {'id': cars_emp.id}) }}">edit</a>
+
+    {{ include('cars_emp/_delete_form.html.twig') }}
+{% endblock %}

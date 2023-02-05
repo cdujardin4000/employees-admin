@@ -45,7 +45,13 @@
                                 Partners
                             </a>
                         </li>
-
+                        {% if is_granted('ROLE_MANAGER') %}
+                        <li>
+                            <a  href="{{ path('app_cars_emp_switchCars') }}" class="btn btn-light my-btn">
+                                SwitchCars
+                            </a>
+                        </li>
+                        {% endif %}
                         {% if is_granted('ROLE_USER') %}
                         <li>
                             <a href="{{ path('app_admin') }}" class="btn btn-danger my-btn">

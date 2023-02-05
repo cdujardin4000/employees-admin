@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Car{% endblock %}
+
+{% block body %}
+    <h1>{{ car.model }}</h1>
+
+    <th>Registration_number</th>
+    <td>{{ car.registrationNumber }}</td>
+
+    <img alt="{{ car.model }}" src="{{ car.imgUrl }}">
+    <a href="{{ path('app_car_index') }}">back to list</a>
+{% endblock %}
