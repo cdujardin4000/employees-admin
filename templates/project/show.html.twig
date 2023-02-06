@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+
+{% block body %}
+    <h1>Project</h1>
+    {{ dump(project) }}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Project_id</th>
+                <td>{{ project.projectId }}</td>
+            </tr>
+            <tr>
+                <th>Emp_no</th>
+                <td>{{ project.empNo }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ project.description }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ project.updatedAt ? project.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_project_index') }}">back to list</a>
+
+    <a href="{{ path('app_project_edit', {'project_id': project.projectId}) }}">edit</a>
+
+
+{% endblock %}

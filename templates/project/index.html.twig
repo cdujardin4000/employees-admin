@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project index{% endblock %}
+
+{% block body %}
+    <h1>Project index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Scrum</th>
+            <th>Description</th>
+            <th>Employees</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for project in projects %}
+            {# instanciate action and submit message #}
+            {% set action = '' %}
+            {# check action #}
+            {% set action = 'remove' %}
+            <tr>
+                <td>{{ project.scrum }}</td>
+                <td>{{ project.description }}</td>
+                <td>
+                    {#  {{ dump(project.employees[0]) }}#}
+                    {% if project.employees|length >= 1 %}
+                        {% for employee in project.employees %}
+                            <div class="emp-remove-action">
+                                {{ employee }}
+                                {# generate strtoken #}
+                                {% set strToken = app.user.id ~ 'project-action' ~ project.projectId ~ employee %}
+                                {# render form #}
+                                <form action="{{ path('app_project_index') }}" method="post" onsubmit="return confirm('Are you sure you want to {{ action }} this item?');">
+                                    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                                    <input type="hidden" name="action" value="{{ action }}"/>
+                                    <input type="hidden" name="project_id" value="{{  project.projectId }}"/>
+                                    <input type="hidden" name="employee" value="{{  employee.id }}"/>
+                                    <input type="hidden" name="project" value="{{  project }}"/>
+                                    <input type="hidden" name="emp_no" value="{{ app.user.id }}"/>
+                                    <input type="hidden" name="token" value="{{ csrf_token(strToken) }}"/>
+                                    <button type="submit" class="{{ action }}">{{ action }}</button>
+                                </form>
+                            </div>
+                        {% endfor  %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

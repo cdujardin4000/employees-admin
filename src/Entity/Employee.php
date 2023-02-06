@@ -123,6 +123,14 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'supervisor', targetEntity: Intern::class)]
     private Collection $interns;
 
+    #[ORM\OneToMany(mappedBy: 'scrum', targetEntity: Project::class)]
+    private Collection $project_managements;
+
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'employees', indexBy: 'emp_no')]
+    #[ORM\JoinTable(name: 'emp_projects')]
+    #[ORM\JoinColumn(name: 'id', referencedColumnName: 'emp_no')]
+    private Collection $projects;
+
 /*    #[ORM\ManyToMany(targetEntity: Car::class, inversedBy: 'employees', indexBy: 'emp_no')]
     #[ORM\JoinTable(name: 'cars_emp')]
     #[ORM\JoinColumn(name: 'id', referencedColumnName: 'emp_no')]
@@ -141,6 +149,8 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Pure] public function __construct()
     {
+        $this->project_managements = new ArrayCollection();
+        $this->projects = new ArrayCollection();
         $this->interns = new ArrayCollection();
         $this->managements = new ArrayCollection();
         $this->supervisions = new ArrayCollection();
@@ -602,6 +612,64 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjectManagements(): Collection
+    {
+        return $this->project_managements;
+    }
+
+    public function addProjectManagement(Project $projectManagement): self
+    {
+        if (!$this->project_managements->contains($projectManagement)) {
+            $this->project_managements->add($projectManagement);
+            $projectManagement->setScrum($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectManagement(Project $projectManagement): self
+    {
+        if ($this->project_managements->removeElement($projectManagement)) {
+            // set the owning side to null (unless already changed)
+            if ($projectManagement->getScrum() === $this) {
+                $projectManagement->setScrum(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->addEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeEmployee($this);
+        }
+
+        return $this;
+    }
 
     /**
      * @return ArrayCollection|Collection
