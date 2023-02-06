@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Car;
+use App\Entity\Intern;
 use App\Entity\Mission;
 use App\Entity\Partner;
 use App\Entity\Title;
@@ -170,6 +171,24 @@ class DashboardController extends AbstractDashboardController
                     ),
             ]);
 
+        yield MenuItem::SubMenu(
+            'Interns',
+            'fas fa-child'
+        )->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Intern::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-plus',
+                Intern::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
+        ]);
 
         yield MenuItem::SubMenu(
             'Titles',
