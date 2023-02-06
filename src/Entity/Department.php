@@ -41,6 +41,9 @@ class Department
     #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
     private Collection $employees;
 
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: Intern::class)]
+    private Collection $interns;
+
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: DeptEmp::class,   fetch: "EAGER")]
     #[ORM\JoinColumn(name: 'dept_no', referencedColumnName: 'dept_no')]
     #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'emp_no')]
@@ -58,6 +61,7 @@ class Department
 
     #[Pure] public function __construct()
     {
+        $this->interns = new ArrayCollection();
         $this->managers = new ArrayCollection();
         $this->employees = new ArrayCollection();
         $this->offers = new ArrayCollection();
@@ -199,6 +203,58 @@ class Department
 
     public function __toString() :string {
         return (string)$this->dept_name;
+    }
+
+    /**
+     * @return Collection<int, Intern>
+     */
+    public function getInterns(): Collection
+    {
+        return $this->interns;
+    }
+
+    public function addIntern(Intern $intern): self
+    {
+        if (!$this->interns->contains($intern)) {
+            $this->interns->add($intern);
+            $intern->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntern(Intern $intern): self
+    {
+        if ($this->interns->removeElement($intern)) {
+            // set the owning side to null (unless already changed)
+            if ($intern->getDepartment() === $this) {
+                $intern->setDepartment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addEmployee(Employee $employee): self
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employee $employee): self
+    {
+        if ($this->employees->removeElement($employee)) {
+            // set the owning side to null (unless already changed)
+            if ($employee->getDepartment() === $this) {
+                $employee->setDepartment(null);
+            }
+        }
+
+        return $this;
     }
 
     public function offsetExists($offset)

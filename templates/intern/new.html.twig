@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Intern{% endblock %}
+
+{% block body %}
+    <h1>Create new Intern</h1>
+
+    {{ include('intern/_form.html.twig') }}
+
+    <a href="{{ path('app_intern_index') }}">back to list</a>
+{% endblock %}

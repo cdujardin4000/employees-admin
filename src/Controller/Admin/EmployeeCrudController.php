@@ -7,6 +7,8 @@ use App\Entity\Employee;
 use App\Form\DeptEmpType;
 use App\Repository\EmployeeRepository;
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -92,8 +94,8 @@ class EmployeeCrudController extends AbstractCrudController
                 return;
             }
 
-            $hash = $this->userPasswordHasher->hashPassword($entitydto, $password);
-            $form->getData()->setPassword($hash);
+/*            $hash = $this->userPasswordHasher->hashPassword($entityInstance, $password);
+            $form->getData()->setPassword($hash);*/
         };
     }
 
@@ -121,12 +123,27 @@ class EmployeeCrudController extends AbstractCrudController
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->isGranted('ROLE_SUPER_ADMIN'))
+        {
+/*            $aff = $this->getUser()?->getAffectations();
+            //$first = $aff->orderBy(['to_date' => Criteria::DESC])->first();
+
+            //$dept = $this->getUser()?->getCurrentAffectation();
+            $today = new DateTime('9999-01-01');
+            //dd($unlimited);
+            $expr = new Comparison('to_date', Comparison::GT, $today);
+
+            $criteria = new Criteria();
+
+            $criteria->where($expr);
+
+            $dept = $aff->matching($criteria);
+            dd($dept);*/
             return $queryBuilder;
         }
         if ($this->isGranted('ROLE_MANAGER')) {
-            $dept = $this->getUser()?->getManagements();
-            //dd($dept);
+/*            $dept = $this->getUser()?->getAffectations();
+            dd($dept);*/
             return $queryBuilder;
         }
         //dd($this->getDepartment);

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Intern list{% endblock %}
+
+{% block body %}
+    <h1>Liste des stagiaires</h1>
+    <form action="{{ path('app_intern_manageIntern') }}" method="post" >
+        <input type="hidden" name="action" value="submit" />
+        {# generate strtoken #}
+        {% set strToken = 'intern-action' %}
+        <input type="hidden" name="emp_no" value="{{ app.user.id }}"/>
+        <input type="hidden" name="token" value="{{ csrf_token(strToken) }}"/>
+        <label for="supervisor">
+            Supervisor
+            <select name="supervisor">
+                <option id="" value="Select a value">Select a value</option>
+                {% for employee in employees %}
+                    {% if employee.getInterns|length == 0 %}
+                        <option id="supervisor" value="{{ employee.getId }}">{{ employee }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Departement</th>
+                    <th>Fullname</th>
+                    <th>Start_date</th>
+                    <th>End_date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set today = "now"|date('Y-m-d') %}
+
+            {% for intern in interns|filter(i => i.startDate|date('Y-m-d')  <= today and i.endDate|date('Y-m-d') >= today)  %}
+            {# instanciate action and submit message #}
+
+            {# check action #}
+            {% if intern.emp != null %}
+                {% set action = 'terminate' %}
+            {% else %}
+                {% set action = 'supervise' %}
+            {% endif %}
+                {% set idSubmit = intern.id ~ '-submit'  %}
+                {% set value = intern.id ~ '-' ~ action %}
+                <tr>
+                    <td>{{ intern.department }}</td>
+                    <td>{{ intern.fullname }}</td>
+                    <td>{{ intern.startDate ? intern.startDate|date('Y-m-d') : '' }}</td>
+                    <td>{{ intern.endDate ? intern.endDate|date('Y-m-d') : '' }}</td>
+                    <td>
+                        <input id="{{ idSubmit }}" class="{{ action }}" type="submit" name="submit" value="{{ value }}">
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Intern index{% endblock %}
+
+{% block body %}
+    <h1>My interns</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fullname</th>
+                <th>Start_date</th>
+                <th>End_date</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for intern in interns  %}
+            <tr>
+                <td>{{ intern.id }}</td>
+                <td>{{ intern.fullname }}</td>
+                <td>{{ intern.startDate ? intern.startDate|date('Y-m-d') : '' }}</td>
+                <td>{{ intern.endDate ? intern.endDate|date('Y-m-d') : '' }}</td>
+                {%  if intern.emp %}
+                    <td>{{ intern.department }}</td>
+                {% else %}
+                {# generate strtoken #}
+                {% set strToken = app.user.id ~ 'supervise-action' ~ intern.id %}
+                {# render form #}
+                <td>
+                    <form action="{{ path('app_intern_superviseIntern') }}" method="post" onsubmit="return confirm('Are you sure you want to supervise this item?');">
+                        {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                        <input type="hidden" name="action" value="supervise"/>
+                        <input type="hidden" name="id" value="{{ intern.id }}"/>
+                        <input type="hidden" name="emp_no" value="{{ app.user.id }}"/>
+                        <input type="hidden" name="token" value="{{ csrf_token(strToken) }}"/>
+                        <button class="supervise" type="submit">Supervise</button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_intern_new') }}">Create new</a>
+{% endblock %}

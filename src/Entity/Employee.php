@@ -2,9 +2,12 @@
 namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -117,11 +120,14 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'emp_no', referencedColumnName: 'id')]
     private Collection $missions;
 
-    #[ORM\ManyToMany(targetEntity: Car::class, mappedBy: 'employees', indexBy: 'emp_no')]
+    #[ORM\OneToMany(mappedBy: 'supervisor', targetEntity: Intern::class)]
+    private Collection $interns;
+
+/*    #[ORM\ManyToMany(targetEntity: Car::class, inversedBy: 'employees', indexBy: 'emp_no')]
     #[ORM\JoinTable(name: 'cars_emp')]
-    #[ORM\InverseJoinColumn(name: 'emp_no', referencedColumnName: 'id')]
-    #[ORM\JoinColumn(name: 'car_id', referencedColumnName: 'car_id')]
-    private Collection $cars;
+    #[ORM\JoinColumn(name: 'id', referencedColumnName: 'emp_no')]
+    #[ORM\InverseJoinColumn(name: 'car_id', referencedColumnName: 'car_id')]
+    private Collection $cars;*/
 
     /**
      * #[ORM\OneToMany(mappedBy: 'employee', targetEntity: DeptManager::class)]
@@ -135,6 +141,7 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Pure] public function __construct()
     {
+        $this->interns = new ArrayCollection();
         $this->managements = new ArrayCollection();
         $this->supervisions = new ArrayCollection();
         $this->attributions = new ArrayCollection();
@@ -144,7 +151,7 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
         $this->salaries = new ArrayCollection();
         $this->titles = new ArrayCollection();
         $this->missions = new ArrayCollection();
-        $this->cars = new ArrayCollection();
+        //$this->cars = new ArrayCollection();
 
     }
 
@@ -331,6 +338,21 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAffectations(): Collection
     {
         return $this->affectations;
+    }
+
+    public function getCurrentAffectation(): Collection
+    {
+        $collection = $this->affectations;
+        $unlimited = new DateTime('9999-01-01 00:00:00.0');
+
+        $expr = new Comparison('to_date', '=', $unlimited);
+
+
+        $criteria = new Criteria();
+
+        $criteria->where($expr);
+
+        return $collection->matching($criteria);
     }
 
     /**
@@ -538,20 +560,63 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return ArrayCollection|Collection
-     */
-    public function getCars(): ArrayCollection|Collection
+    public function getDepartment(): ?Department
     {
-        return $this->cars;
+        return $this->department;
+    }
+
+    public function setDepartment(?Department $department): self
+    {
+        $this->department = $department;
+
+        return $this;
     }
 
     /**
-     * @param ArrayCollection|Collection $cars
+     * @return Collection<int, Intern>
      */
+    public function getInterns(): Collection
+    {
+        return $this->interns;
+    }
+
+    public function addIntern(Intern $intern): self
+    {
+        if (!$this->interns->contains($intern)) {
+            $this->interns->add($intern);
+            $intern->setSupervisor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntern(Intern $intern): self
+    {
+        if ($this->interns->removeElement($intern)) {
+            // set the owning side to null (unless already changed)
+            if ($intern->getSupervisor() === $this) {
+                $intern->setSupervisor(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return ArrayCollection|Collection
+
+    public function getCars(): ArrayCollection|Collection
+    {
+        return $this->cars;
+    }*/
+
+    /**
+     * @param ArrayCollection|Collection $cars
+
     public function setCars(ArrayCollection|Collection $cars): void
     {
         $this->cars = $cars;
-    }
+    }*/
 
 }
