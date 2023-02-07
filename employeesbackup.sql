@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 04 fév. 2023 à 18:54
+-- Généré le : mar. 07 fév. 2023 à 12:40
 -- Version du serveur : 10.4.25-MariaDB
 -- Version de PHP : 8.1.10
 
@@ -18,8 +18,65 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `employees_ruth`
+-- Base de données : `employeesbackup`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cars`
+--
+
+CREATE TABLE `cars` (
+  `car_id` int(11) NOT NULL,
+  `registration_number` varchar(10) NOT NULL,
+  `model` varchar(30) NOT NULL,
+  `img_url` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `cars`
+--
+
+INSERT INTO `cars` (`car_id`, `registration_number`, `model`, `img_url`) VALUES
+(1, 'FTW-666-BE', 'Alpha Romeo 159 2.2 JTS', 'https://www.carscoops.com/wp-content/uploads/2008/06/Alfa_Romeo_159_Autodelta_0.jpg'),
+(2, '86-CSD-03Q', 'BMW 320i E90', 'https://www.largus.fr/images/photos/rsi/_G_JPG/Voitures/BMW/Serie_3/V_E90/Ph2_NG/Berline_4_portes/troisquartavant1.jpg'),
+(3, 'XVX-303-07', 'Alpine A110 R', 'https://images.caradisiac.com/images/0/4/0/8/200408/S1-essai-video-alpine-a110-r-un-surcout-justifie-743696.jpg'),
+(4, 'XYZ-Z57-Uv', 'Toyota Supra V3', 'https://images.caradisiac.com/images/9/2/9/4/199294/S1-toyota-supra-bvm-une-bonne-idee-736145.jpg'),
+(5, 'BCY-599-ST', 'Ferrari Purosangue', 'https://media.autoexpress.co.uk/image/private/s--lXGo3Mn_--/f_auto,t_content-image-full-desktop@1/v1673264026/autoexpress/2023/01/Best%20new%20cars%202023-20.jpg'),
+(6, 'BUD-85-S7H', 'BMW XM', 'https://media.autoexpress.co.uk/image/private/s--bUPOXRJ2--/f_auto,t_content-image-full-desktop@1/v1673263988/autoexpress/2023/01/Best%20new%20cars%202023-4.jpg'),
+(7, 'D8E-5E-FTY', 'Ford Mustang', 'https://media.autoexpress.co.uk/image/private/s--GlSQBN3m--/f_auto,t_content-image-full-desktop@1/v1673263985/autoexpress/2023/01/Best%20new%20cars%202023-7.jpg'),
+(8, 'FFE-74-8F9', 'Hyunday Ioniq 5 N', 'https://media.autoexpress.co.uk/image/private/s--BafjcJ8t--/f_auto,t_content-image-full-desktop@1/v1673264000/autoexpress/2023/01/Best%20new%20cars%202023-10.jpg'),
+(9, 'DF7-8Y-55E', 'Alfa Romeo Giulia EV', 'https://media.autoexpress.co.uk/image/private/s--3lcHqsZ4--/f_auto,t_content-image-full-desktop@1/v1636126203/autoexpress/2021/11/Alfa%20Romeo%20Giulia%20EV.jpg'),
+(10, '4D8-F34-TT', 'Alfa Romeo small e-SUV', 'https://media.autoexpress.co.uk/image/private/s--HuLSwJob--/f_auto,t_content-image-full-desktop@1/v1636541772/autoexpress/2021/11/Alpine%20R5.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cars_emp`
+--
+
+CREATE TABLE `cars_emp` (
+  `emp_no` int(11) NOT NULL,
+  `car_id` int(11) NOT NULL,
+  `from_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `cars_emp`
+--
+
+INSERT INTO `cars_emp` (`emp_no`, `car_id`, `from_date`) VALUES
+(10001, 7, '2023-02-06'),
+(10002, 1, '2023-02-06'),
+(10004, 2, '2023-02-04'),
+(10005, 8, '2023-02-05'),
+(10006, 3, '2023-02-04'),
+(10007, 6, '2023-02-05'),
+(10011, 5, '2023-02-05'),
+(10043, 10, '2023-02-05'),
+(10052, 4, '2023-02-06'),
+(10054, 9, '2023-02-06');
 
 -- --------------------------------------------------------
 
@@ -87,13 +144,14 @@ CREATE TABLE `departments` (
 INSERT INTO `departments` (`dept_no`, `dept_name`, `description`, `dept_img`, `address`, `roi_url`) VALUES
 ('d001', 'Marketing', 'The Marketing Department plays a vital role in promoting the business and mission of an organization. It serves as the face of your company, coordinating and producing all materials representing the business.', 'uploads/departments/depart-marketing-1673963989.jpg', 'Place du marché 12, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
 ('d002', 'Finance', 'The Finance Department consists of three main services:  \r\n1. Management Support Service  \r\n2. Financial Operations Service  \r\n3. Purchasing Office\r\nAnd he is also responsable for the good balance of the enterprise\r\nMake money is the key', 'uploads/departments/20943477-1673963904.jpg', 'Avenue de l\'oseille 666, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
-('d003', 'Human Resources', 'The human resource department\'s mission is to make sure the company\'s employees are adequately managed, appropriately compensated, and effectively trained. The department is also responsible for recruiting, hiring, firing, and administering benefits.', 'uploads/departments/depart-research-1673963961.jpg', 'Rue du bonhomme 48, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
+('d003', 'Human Resources', 'The human resource department\'s mission is to make sure the company\'s employees are adequately managed, appropriately compensated, and effectively trained. The department is also responsible for recruiting, hiring, firing, and administering benefits.', 'uploads/departments/depart-manager-1675683693.jpg', 'Rue du bonhomme 48, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
 ('d004', 'Production', 'Responsible for the manufacture of goods. This can include just a few specialized functions with all other work outsourced, or a fully functioning department that converts raw materials. One word only: PRODUCTIVITY', 'uploads/departments/depart-production-1673964003.jpg', 'Square du carton, 135, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
 ('d005', 'Development', 'Its members are responsible for a number of key objectives inside and outside the organization. They study the products, services and operations of companies, providing consultative help where needed.', 'uploads/departments/3426526-1673963874.jpg', 'Place des codeurs 754, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
 ('d006', 'Quality Management', 'Quality management is the act of overseeing all activities and tasks that must be accomplished to maintain a desired level of excellence. This includes the determination of a quality policy, creating and implementing quality planning and assurance', 'uploads/departments/depart-quality-1673964022.jpg', 'Avenue de la durabilité 14, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
 ('d007', 'Sales', 'The sales department is often tasked with meeting certain targets of product or service sales. They would meet periodically and discuss sales strategies and tactics to try and sell you more of something! Money money money', 'uploads/departments/6573-1673964075.jpg', 'Marché au Zeille 124, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
 ('d008', 'Research', 'We are currently conducting research on e-commerce, payment transactions, financial literacy, European competition policy and the economics of competition, economic growth, the economics of politics, social capital, international trade,', 'uploads/departments/depart-research-1673964049.jpg', 'Avenue de l\'innovation 138, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
-('d009', 'Customer Service', 'The customer service department is a team that impacts the business by handling all direct customer service needs. Learn the specific roles and tasks of the team, including best practices for customer service delivery.', 'uploads/departments/depart-customer-1673963034.jpg', 'Ruelle de l\'embrouille 147, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf');
+('d009', 'Customer Service', 'The customer service department is a team that impacts the business by handling all direct customer service needs. Learn the specific roles and tasks of the team, including best practices for customer service delivery.', 'uploads/departments/depart-customer-1673963034.jpg', 'Ruelle de l\'embrouille 147, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf'),
+('d010', 'Optimisation', 'We help you improve your marketing operations to do more with fewer resources, in a disruptive environment of constant technological change.', 'uploads/departments/06-1675603950-1675683436.svg', 'Avenue de la performance 597, 1000 Bruxelles', 'https://www.orsys.fr/pdf-auto/pdfcours/RS.pdf');
 
 -- --------------------------------------------------------
 
@@ -130,7 +188,8 @@ INSERT INTO `dept_emp` (`emp_no`, `dept_no`, `from_date`, `to_date`) VALUES
 (10043, 'd006', '2023-01-17', '9999-01-01'),
 (10048, 'd005', '2023-01-11', '9999-01-01'),
 (10049, 'd004', '2023-01-12', '9999-01-01'),
-(10050, 'd005', '2023-01-14', '9999-01-01');
+(10050, 'd005', '2023-01-14', '9999-01-01'),
+(10054, 'd010', '2023-02-06', '9999-01-01');
 
 -- --------------------------------------------------------
 
@@ -182,7 +241,8 @@ INSERT INTO `dept_manager` (`emp_no`, `dept_no`, `from_date`, `to_date`) VALUES
 (10011, 'd006', '2021-01-15', '2022-01-01'),
 (10011, 'd009', '2022-01-01', '9999-01-01'),
 (10043, 'd006', '2023-01-17', '9999-01-01'),
-(10052, 'd004', '2022-12-15', '9999-01-01');
+(10052, 'd004', '2022-12-15', '9999-01-01'),
+(10054, 'd010', '2023-02-06', '9999-01-01');
 
 -- --------------------------------------------------------
 
@@ -276,7 +336,31 @@ INSERT INTO `employees` (`emp_no`, `birth_date`, `first_name`, `last_name`, `gen
 (10050, '1903-01-01', 'hrt', 'Frimout', 'M', NULL, NULL, 'hhrth@gmail.com', '2023-01-14', NULL, NULL, '$2y$13$sjWvAfOvIibvjm3bL0y5deteBG9M9/tN8v.8zTKWc1kPOh3ryrOe6', '[]', 1, '2023-01-14 10:54:33'),
 (10051, '1977-02-09', 'Deray', 'Odille', 'F', NULL, NULL, 'odille@der.com', '2023-01-15', NULL, NULL, 'test123', '{\"0\":\"ROLE_USER\",\"2\":\"ROLE_COMPTABLE\",\"1\":\"ROLE_MANAGER\"}', 1, NULL),
 (10052, '2023-01-11', 'Ismail', 'Ketal', 'M', 'uploads/employees/photos/5686470-1675530879.jpg', NULL, 'ismail@ketal.com', '2023-01-11', NULL, NULL, 'test123', '[\"ROLE_USER\",\"ROLE_MANAGER\"]', 1, NULL),
-(10053, '1978-06-25', 'Block', 'Ken', 'M', NULL, NULL, 'ken@block.com', '2023-01-15', NULL, NULL, 'test123', '[]', 1, NULL);
+(10053, '1978-06-25', 'Block', 'Ken', 'M', NULL, NULL, 'ken@block.com', '2023-01-15', NULL, NULL, 'test123', '[]', 1, NULL),
+(10054, '1985-02-21', 'Ruth', 'Cédryc', 'M', 'uploads/employees/photos/vf-les-plus-beaux-visageshommes-3811-1675702586.webp', NULL, 'cedryc@encore.com', '2013-02-19', NULL, NULL, '$2y$13$BIfM5g94PJPPGBthAXXrNefpJmtOO5GTn.CpQXzmlREEXPc8IqJB6', '{\"0\":\"ROLE_MANAGER\",\"1\":\"ROLE_USER\",\"3\":\"ROLE_ADMIN\"}', 1, '2023-02-05 14:41:11');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `emp_projects`
+--
+
+CREATE TABLE `emp_projects` (
+  `project_id` int(11) NOT NULL,
+  `emp_no` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `emp_projects`
+--
+
+INSERT INTO `emp_projects` (`project_id`, `emp_no`) VALUES
+(1, 10011),
+(2, 10002),
+(3, 10005),
+(1, 10009),
+(2, 10011),
+(4, 10002);
 
 -- --------------------------------------------------------
 
@@ -313,7 +397,65 @@ INSERT INTO `emp_title` (`emp_no`, `title_no`, `from_date`, `to_date`) VALUES
 (10010, 3, '1996-11-24', '9999-01-01'),
 (10011, 1, '2021-01-15', '2023-01-01'),
 (10011, 7, '2023-01-01', '9999-01-01'),
-(10043, 7, '2023-01-17', '9999-01-01');
+(10043, 7, '2023-01-17', '9999-01-01'),
+(10054, 7, '2023-02-06', '9999-01-01');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `interns`
+--
+
+CREATE TABLE `interns` (
+  `id` int(11) NOT NULL,
+  `emp` int(11) DEFAULT NULL,
+  `fullname` varchar(100) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `dept` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `interns`
+--
+
+INSERT INTO `interns` (`id`, `emp`, `fullname`, `start_date`, `end_date`, `dept`) VALUES
+(1, 10011, 'Raymond Barre', '2023-01-20', '2023-02-28', 'd006'),
+(2, NULL, 'Luc Goossu', '2023-01-10', '2023-02-28', 'd007'),
+(3, 10001, 'herve Mailleux', '2023-01-10', '2023-02-28', 'd006'),
+(4, 10002, 'Marc Wilmots', '2023-01-01', '2023-01-03', 'd007'),
+(5, 10054, 'Mermed Mamoud', '2023-01-10', '2023-02-28', 'd006'),
+(6, 10005, 'Chris Blade', '2023-01-05', '2023-02-17', 'd008'),
+(8, 10004, 'Dana White', '2023-01-13', '2023-03-31', 'd002'),
+(10, 10011, 'Po Atan', '2023-01-13', '2023-03-31', 'd008'),
+(11, 10011, 'Israel Adesanya', '2023-01-13', '2023-03-31', 'd001');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `leaves`
+--
+
+CREATE TABLE `leaves` (
+  `leave_id` int(11) NOT NULL,
+  `emp_no` int(6) NOT NULL,
+  `type` varchar(15) NOT NULL,
+  `from_date` datetime NOT NULL,
+  `to_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `leaves`
+--
+
+INSERT INTO `leaves` (`leave_id`, `emp_no`, `type`, `from_date`, `to_date`) VALUES
+(1, 10001, 'paternity', '2022-01-30 16:09:52', '2023-02-02 19:54:43'),
+(2, 10002, 'sick', '2023-01-22 01:06:05', '2023-02-24 00:43:40'),
+(3, 10003, 'sick', '2023-01-21 19:51:07', '2023-01-31 19:51:42'),
+(4, 10001, 'training', '2023-01-04 20:23:22', '2023-01-24 00:44:03'),
+(5, 10001, 'training', '2023-01-07 20:23:22', '2023-01-20 20:23:22'),
+(6, 10006, 'training', '2023-01-07 20:23:22', '2023-01-23 21:33:25'),
+(7, 10008, 'training', '2023-01-07 20:23:22', '2023-01-23 23:59:46');
 
 -- --------------------------------------------------------
 
@@ -374,6 +516,30 @@ INSERT INTO `partners` (`id`, `title`, `url`, `logo`) VALUES
 (4, 'The valley of code', 'https://thevalleyofcode.com/', 'uploads/partners/thevalleyofcode3x-1673908407.png'),
 (5, 'Cedric Dujardin', 'https://portfolio.cedricdujardin.com/', 'uploads/partners/capture-d-ecran-2023-01-17-165811-1673971254.jpg'),
 (6, 'Traversy media', 'https://www.traversymedia.com/', 'uploads/partners/15621700-1314192591964696-4145978218586946858-n-1673914114.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `projects`
+--
+
+CREATE TABLE `projects` (
+  `project_id` int(11) NOT NULL,
+  `emp_no` int(11) DEFAULT NULL,
+  `description` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `projects`
+--
+
+INSERT INTO `projects` (`project_id`, `emp_no`, `description`, `created_at`, `updated_at`) VALUES
+(1, 10011, 'project 1', '2023-01-24 14:56:48', '2023-01-24 14:56:48'),
+(2, 10001, 'project 2', '2023-01-24 14:56:48', '2023-01-24 14:56:48'),
+(3, 10054, 'Project 3', '2023-01-24 14:59:09', '2023-01-24 14:59:09'),
+(4, 10043, 'Project 4', '2023-01-24 15:00:02', '2023-01-24 15:00:02');
 
 -- --------------------------------------------------------
 
@@ -581,6 +747,21 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
+-- Index pour la table `cars`
+--
+ALTER TABLE `cars`
+  ADD PRIMARY KEY (`car_id`),
+  ADD UNIQUE KEY `registration_number` (`registration_number`) USING BTREE;
+
+--
+-- Index pour la table `cars_emp`
+--
+ALTER TABLE `cars_emp`
+  ADD PRIMARY KEY (`emp_no`,`car_id`),
+  ADD KEY `emp_no` (`emp_no`),
+  ADD KEY `car_id` (`car_id`);
+
+--
 -- Index pour la table `demands`
 --
 ALTER TABLE `demands`
@@ -629,11 +810,33 @@ ALTER TABLE `employees`
   ADD PRIMARY KEY (`emp_no`);
 
 --
+-- Index pour la table `emp_projects`
+--
+ALTER TABLE `emp_projects`
+  ADD KEY `project_id` (`project_id`),
+  ADD KEY `emp_no` (`emp_no`);
+
+--
 -- Index pour la table `emp_title`
 --
 ALTER TABLE `emp_title`
   ADD PRIMARY KEY (`emp_no`,`title_no`,`from_date`),
   ADD KEY `title_no` (`title_no`);
+
+--
+-- Index pour la table `interns`
+--
+ALTER TABLE `interns`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `dept` (`dept`),
+  ADD KEY `emp` (`emp`);
+
+--
+-- Index pour la table `leaves`
+--
+ALTER TABLE `leaves`
+  ADD PRIMARY KEY (`leave_id`),
+  ADD KEY `emp_no` (`emp_no`);
 
 --
 -- Index pour la table `links`
@@ -655,6 +858,13 @@ ALTER TABLE `partners`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`project_id`),
+  ADD KEY `emp_no` (`emp_no`);
+
+--
 -- Index pour la table `salaries`
 --
 ALTER TABLE `salaries`
@@ -662,120 +872,68 @@ ALTER TABLE `salaries`
   ADD UNIQUE KEY `emp_no` (`emp_no`,`from_date`);
 
 --
--- Index pour la table `titles`
---
-ALTER TABLE `titles`
-  ADD PRIMARY KEY (`title_no`);
-
---
--- Index pour la table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`);
-
---
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT pour la table `demands`
+-- AUTO_INCREMENT pour la table `cars`
 --
-ALTER TABLE `demands`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+ALTER TABLE `cars`
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `emp_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10062;
+  MODIFY `emp_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10055;
 
 --
--- AUTO_INCREMENT pour la table `links`
+-- AUTO_INCREMENT pour la table `interns`
 --
-ALTER TABLE `links`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `interns`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT pour la table `missions`
+-- AUTO_INCREMENT pour la table `leaves`
 --
-ALTER TABLE `missions`
-  MODIFY `mission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `leaves`
+  MODIFY `leave_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `partners`
+-- AUTO_INCREMENT pour la table `projects`
 --
-ALTER TABLE `partners`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT pour la table `salaries`
---
-ALTER TABLE `salaries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
-
---
--- AUTO_INCREMENT pour la table `titles`
---
-ALTER TABLE `titles`
-  MODIFY `title_no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT pour la table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `projects`
+  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `demands`
+-- Contraintes pour la table `emp_projects`
 --
-ALTER TABLE `demands`
-  ADD CONSTRAINT `demands_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON UPDATE CASCADE;
+ALTER TABLE `emp_projects`
+  ADD CONSTRAINT `emp_projects_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `emp_projects_ibfk_2` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `dept_emp`
+-- Contraintes pour la table `interns`
 --
-ALTER TABLE `dept_emp`
-  ADD CONSTRAINT `dept_emp_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `dept_emp_ibfk_2` FOREIGN KEY (`dept_no`) REFERENCES `departments` (`dept_no`) ON UPDATE CASCADE;
+ALTER TABLE `interns`
+  ADD CONSTRAINT `interns_ibfk_1` FOREIGN KEY (`emp`) REFERENCES `employees` (`emp_no`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `interns_ibfk_2` FOREIGN KEY (`dept`) REFERENCES `departments` (`dept_no`) ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `dept_manager`
+-- Contraintes pour la table `leaves`
 --
-ALTER TABLE `dept_manager`
-  ADD CONSTRAINT `dept_manager_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `dept_manager_ibfk_2` FOREIGN KEY (`dept_no`) REFERENCES `departments` (`dept_no`) ON UPDATE CASCADE;
+ALTER TABLE `leaves`
+  ADD CONSTRAINT `leaves_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `dept_title`
+-- Contraintes pour la table `projects`
 --
-ALTER TABLE `dept_title`
-  ADD CONSTRAINT `dept_title_ibfk_1` FOREIGN KEY (`dept_no`) REFERENCES `departments` (`dept_no`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `dept_title_ibfk_2` FOREIGN KEY (`title_no`) REFERENCES `titles` (`title_no`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `dept_title_ibfk_3` FOREIGN KEY (`title_no`) REFERENCES `titles` (`title_no`) ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `emp_title`
---
-ALTER TABLE `emp_title`
-  ADD CONSTRAINT `emp_title_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `emp_title_ibfk_2` FOREIGN KEY (`title_no`) REFERENCES `titles` (`title_no`) ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `missions`
---
-ALTER TABLE `missions`
-  ADD CONSTRAINT `missions_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `salaries`
---
-ALTER TABLE `salaries`
-  ADD CONSTRAINT `salaries_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON UPDATE CASCADE;
+ALTER TABLE `projects`
+  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`emp_no`) REFERENCES `employees` (`emp_no`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
