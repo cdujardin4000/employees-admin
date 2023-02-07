@@ -26,60 +26,65 @@
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                         <li>
-                            <a href="{{ path('app_home') }}" class="btn btn-outline-light my-btn">
+                            <a href="{{ path('app_home') }}" data-bs-toggle="button" class="btn btn-light my-btn">
                                 Home
                             </a>
                         </li>
                         <li>
-                            <a href="{{ path('app_department_index') }}"  class="btn btn-outline-danger my-btn">
+                            <a href="{{ path('app_department_index') }}" data-bs-toggle="button" class="btn btn-danger my-btn">
                                 Departments
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="btn btn-outline-info  my-btn">
+                            <a href="#" data-bs-toggle="button" class="btn btn-info  my-btn">
                                 Women at work
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="btn btn-outline-warning my-btn">
+                            <a href="#" data-bs-toggle="button" class="btn btn-warning my-btn">
                                 Partners
                             </a>
                         </li>
                         {% if is_granted('ROLE_MANAGER') %}
                             <li>
-                                <a href="{{ path('app_intern_manageIntern')}}" class="btn btn-success my-btn">
+                                <a href="{{ path('app_intern_manageIntern')}}" class="btn btn-outline-success my-btn">
                                     Interns
                                 </a>
                             </li>
                             <li>
-                                <a  href="{{ path('app_cars_emp_switchCars') }}" class="btn btn-light my-btn">
+                                <a  href="{{ path('app_cars_emp_switchCars') }}" class="btn btn-outline-light my-btn">
                                     SwitchCars
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ path('app_leave_index') }}" class="btn btn-outline-info my-btn" >
+                                    Leaves
                                 </a>
                             </li>
                         {% endif %}
                         {% if is_granted('ROLE_USER') %}
                             <li>
-                                <a href="{{ path('app_mission_list', { id : app.user.id }) }}" class="btn btn-warning my-btn">
+                                <a href="{{ path('app_mission_list', { id : app.user.id }) }}" class="btn btn-outline-warning my-btn">
                                     My missions
                                 </a>
                             </li>
                             <li >
-                                <a href="{{ path('app_project_index') }}" class="btn btn-primary my-btn" >
+                                <a href="{{ path('app_project_index') }}" class="btn btn-outline-primary my-btn" >
                                     Projects
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ path('app_intern_superviseIntern')}}" class="btn btn-secondary my-btn">
+                                <a href="{{ path('app_intern_superviseIntern')}}" class="btn btn-outline-secondary my-btn">
                                     My interns
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ path('app_employee_show', { id : app.user.id }) }}" class="btn btn-info my-btn">
+                                <a href="{{ path('app_employee_show', { id : app.user.id }) }}" class="btn btn-outline-info my-btn">
                                     Profile
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ path('app_admin') }}" class="btn btn-danger my-btn">
+                                <a href="{{ path('app_admin') }}" class="btn btn-outline-danger my-btn">
                                     Admin
                                  </a>
                             </li>
@@ -116,6 +121,13 @@
     </header>
 
     <div class="container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block body %}{% endblock %}
     </div>
 

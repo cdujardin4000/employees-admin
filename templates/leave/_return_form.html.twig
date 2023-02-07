@@ -1,0 +1,4 @@
+<form method="post" action="{{ url('leave/return/', {'leave_id': leave.LeaveId}) }}" onsubmit="return confirm('Are you sure you want to return from leave this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('return' ~  leave.LeaveId) }}">
+    <button class="btn">Return</button>
+</form>

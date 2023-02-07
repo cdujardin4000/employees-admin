@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Absences du jour{% endblock %}
+
+{% block body %}
+    <h1>Absences du jour</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Employee</th>
+
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for leave in leaves %}
+            {# instanciate action #}
+            {% set action = '' %}
+            {# check action #}
+            {% set action = 'return' %}
+            <tr>
+
+                <td>{{ leave.employee }} ({{ leave.type }})</td>
+                <td>
+                    {# generate strtoken #}
+                    {% set strToken = app.user.id ~ 'leave-action' ~ leave.LeaveId %}
+                    {# render form #}
+                    <form action="{{ path('app_leave_return', {leave_id: leave.LeaveId}) }}" method="post" onsubmit="return confirm('Are you sure you want to {{ action }} this item?');">
+                        {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                        <input type="hidden" name="action" value="{{ action }}"/>
+                        <input type="hidden" name="leave_id" value="{{ leave.LeaveId }}"/>
+                        <input type="hidden" name="token" value="{{ csrf_token(strToken) }}"/>
+                        <button type="submit">{{ action }}</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

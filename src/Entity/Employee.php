@@ -131,6 +131,9 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'id', referencedColumnName: 'emp_no')]
     private Collection $projects;
 
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Leave::class)]
+    private Collection $leaves;
+
 /*    #[ORM\ManyToMany(targetEntity: Car::class, inversedBy: 'employees', indexBy: 'emp_no')]
     #[ORM\JoinTable(name: 'cars_emp')]
     #[ORM\JoinColumn(name: 'id', referencedColumnName: 'emp_no')]
@@ -149,6 +152,7 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Pure] public function __construct()
     {
+        $this->leaves = new ArrayCollection();
         $this->project_managements = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->interns = new ArrayCollection();
@@ -666,6 +670,36 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->projects->removeElement($project)) {
             $project->removeEmployee($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Leave>
+     */
+    public function getLeaves(): Collection
+    {
+        return $this->leaves;
+    }
+
+    public function addLeave(Leave $leave): self
+    {
+        if (!$this->leaves->contains($leave)) {
+            $this->leaves->add($leave);
+            $leave->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLeave(Leave $leave): self
+    {
+        if ($this->leaves->removeElement($leave)) {
+            // set the owning side to null (unless already changed)
+            if ($leave->getEmployee() === $this) {
+                $leave->setEmployee(null);
+            }
         }
 
         return $this;

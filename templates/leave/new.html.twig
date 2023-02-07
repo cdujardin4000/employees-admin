@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Leave{% endblock %}
+
+{% block body %}
+    <h1>Create new Leave</h1>
+
+    {{ include('leave/_form.html.twig') }}
+
+    <a href="{{ path('app_leave_index') }}">back to list</a>
+{% endblock %}

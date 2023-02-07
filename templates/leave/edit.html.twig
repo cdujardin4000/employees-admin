@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Leave{% endblock %}
+
+{% block body %}
+    <h1>Edit Leave</h1>
+
+    {{ include('leave/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_leave_index') }}">back to list</a>
+
+    {{ include('leave/_delete_form.html.twig') }}
+{% endblock %}
