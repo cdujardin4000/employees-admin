@@ -6,6 +6,7 @@ use App\Entity\Car;
 use App\Entity\Intern;
 use App\Entity\Mission;
 use App\Entity\Partner;
+use App\Entity\Project;
 use App\Entity\Title;
 use App\Repository\DepartmentRepository;
 use App\Repository\DeptEmpRepository;
@@ -170,6 +171,25 @@ class DashboardController extends AbstractDashboardController
                         'ROLE_SUPER_ADMIN'
                     ),
             ]);
+
+        yield MenuItem::SubMenu(
+            'Projects',
+            'fas fa-project-diagram'
+        )->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Project::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-plus',
+                Project::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
+        ]);
 
         yield MenuItem::SubMenu(
             'Interns',
