@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Car;
 use App\Entity\Intern;
+use App\Entity\Leave;
 use App\Entity\Mission;
 use App\Entity\Partner;
 use App\Entity\Project;
@@ -185,6 +186,25 @@ class DashboardController extends AbstractDashboardController
                 'Add',
                 'fas fa-plus',
                 Project::class
+            )->setAction(Crud::PAGE_NEW)
+                ->setPermission(
+                    'ROLE_SUPER_ADMIN'
+                ),
+        ]);
+
+        yield MenuItem::SubMenu(
+            'Leaves',
+            'far fa-calendar-times'
+        )->setSubItems([
+            MenuItem::linkToCrud(
+                'List',
+                'fa fa-list',
+                Leave::class
+            ),
+            MenuItem::linkToCrud(
+                'Add',
+                'fas fa-plus',
+                Leave::class
             )->setAction(Crud::PAGE_NEW)
                 ->setPermission(
                     'ROLE_SUPER_ADMIN'
