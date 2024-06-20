@@ -4,6 +4,52 @@
 {% endblock %}
 {% block main %}
 
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class ="row">
+                <div class="col-sm-12 col-md-6">
+                    <h3>Latest Arrivals</h3>
+                    <ol>
+                        {% for arrival in arrivals %}
+                            <li>
+                                <a href="{{ path('app_employee_show', {'id': arrival.emp_no }) }}"> {{ arrival.first_name }} {{ arrival.last_name }}</a>- {{ arrival.hire_date|date('Y-m-d') }}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <h3>Our Veterans</h3>
+                    <ol>
+                        {% for veteran in veterans %}
+                            <li>
+                                <a href="{{ path('app_employee_show', {'id': veteran.emp_no }) }}">{{ veteran.first_name }} {{ veteran.last_name }}</a>- {{ veteran.hire_date|date('Y-m-d') }}, {{ veteran.ago }}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <h3>Our partners under the spot</h3>
+            <div class="row">
+                {% for partner in partners %}
+                    <div class="col-sm-12 col-md-6">
+                        <a class="link-img" href="{{ path('app_partner_show', {'id': partner.id }) }}"><img src="{{ partner.logo }}" alt="LOGO" height="60" width="120"></a><br><br>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <h3>Test charts</h3>
+            {{ render_chart(chart) }}
+        </div>
+    </div>
+
+
     <h3>Need to contact One of our Managers fast?</h3>
     <div class="row">
         {% for department in departments %}
@@ -27,41 +73,5 @@
                 </div>
             </div>
         {% endfor %}
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <h3>Test charts</h3>
-            {{ render_chart(chart) }}
-        </div>
-        <div class="col-sm-12 col-md-6">
-            <h3>Our partners under the spot</h3>
-            <div class="row">
-                {% for partner in partners %}
-                    <div class="col-sm-12 col-md-6">
-                        <a class="link-img" href="{{ path('app_partner_show', {'id': partner.id }) }}"><img src="{{ partner.logo }}" alt="LOGO" height="60" width="120"></a><br><br>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            <h3>Latest Arrivals</h3>
-            <ol>
-                {% for arrival in arrivals %}
-                    <li>
-                        <a href="{{ path('app_employee_show', {'id': arrival.emp_no }) }}"> {{ arrival.first_name }} {{ arrival.last_name }}</a>- {{ arrival.hire_date|date('Y-m-d') }}
-                    </li>
-                {% endfor %}
-            </ol>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            <h3>Our Veterans</h3>
-            <ol>
-                {% for veteran in veterans %}
-                    <li>
-                        <a href="{{ path('app_employee_show', {'id': veteran.emp_no }) }}">{{ veteran.first_name }} {{ veteran.last_name }}</a>- {{ veteran.hire_date|date('Y-m-d') }}, {{ veteran.ago }}
-                    </li>
-                {% endfor %}
-            </ol>
-        </div>
     </div>
 {% endblock %}

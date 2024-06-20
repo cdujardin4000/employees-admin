@@ -19,6 +19,7 @@ use App\Entity\Department;
 use App\Entity\Employee;
 use App\Repository\EmployeeRepository;
 use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -44,6 +45,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class DashboardController extends AbstractDashboardController
 {
+    private EntityManagerInterface $doctrine;
+
     private ManagerRegistry $registry;
     private DeptManagerRepository $deptManagerRepository;
     private EmployeeRepository $employeeRepository;
@@ -53,6 +56,7 @@ class DashboardController extends AbstractDashboardController
 
 
     public function __construct(
+        EntityManagerInterface $doctrine,
         ManagerRegistry $registry,
         Employee $employee,
         EmployeeRepository $employeeRepository,
@@ -63,6 +67,7 @@ class DashboardController extends AbstractDashboardController
         DeptEmpRepository $deptEmpRepository
     )
     {
+        $this->doctrine = $doctrine;
         $this->registry = $registry;
         $this->user = $employee;
         $this->chartbuilderInterface = $chartBuilderInterface;
@@ -344,7 +349,7 @@ class DashboardController extends AbstractDashboardController
             'fas fa-user-friends')->setSubItems([
             MenuItem::linkToUrl(
                 'Frontend Masters',
-                      '',
+                    '',
                 'https://frontendmasters.com'
             ),
             MenuItem::linkToUrl(
@@ -408,6 +413,7 @@ class DashboardController extends AbstractDashboardController
      */
     public function configureUserMenu(UserInterface $user) : UserMenu
     {
+        //dd($user->findLatest());
         if (!$user instanceof Employee)
         {
             throw new RuntimeException('Wrong user');
@@ -416,26 +422,23 @@ class DashboardController extends AbstractDashboardController
         return parent::configureUserMenu($user)
             ->setAvatarUrl($user?->getAvatar())
             ->addMenuItems([
-               MenuItem::linkToUrl(
-                   'My profile',
-                   'fas-fa-user',
-                   $this->generateUrl('app_employee_show',
-                       [
-                           'id' => $user->getId(),
-                            'current' => $this->employeeRepository->getCurrentDepartment($user->getId())
-                       ]
-                   )
-               ),
                 MenuItem::linkToUrl(
+                    'My profile',
+                    'fas-fa-user',
+                    $this->generateUrl('app_employee_show', [
+                        'id' => $user->getId(),
+                        'current' => $this->employeeRepository->findLatest(),
+                    ])
+                ),
+/*                MenuItem::linkToUrl(
                     'My department',
                     'fas-fa-building',
-                    $this->generateUrl('app_department_show',
+                    $this->generateUrl('app_department_show/' . $this->employeeRepository->getCurrentDepartment($user->getId()),
                         [
-                            //'dept_no' => $this->deptEmpRepository->find($user->get_emp_no()),
-                            'id' => $this->employeeRepository->getCurrentDepartment($user->getId())
+                            'dept_no' => $this->employeeRepository->findLatest(),
                         ]
                     )
-                )
+                )*/
             ]);
     }
 

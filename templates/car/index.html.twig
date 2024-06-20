@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Car_id</th>
                 <th>Registration_number</th>
                 <th>Model</th>
@@ -19,14 +18,13 @@
         <tbody>
         {% for car in cars %}
             <tr>
-                <td>{{ car.id }}</td>
                 <td>{{ car.carId }}</td>
                 <td>{{ car.registrationNumber }}</td>
                 <td>{{ car.model }}</td>
                 <td>{{ car.imgUrl }}</td>
                 <td>
-                    <a href="{{ path('app_car_show', {'id': car.id}) }}">show</a>
-                    <a href="{{ path('app_car_edit', {'id': car.id}) }}">edit</a>
+                    <a href="{{ path('app_car_show', {'id': car.carId}) }}">show</a>
+                    <a href="{{ path('app_car_edit', {'id': car.carId}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

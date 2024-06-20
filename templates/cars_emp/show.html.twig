@@ -27,10 +27,10 @@
                 <th>From_date</th>
                 <td>{{ cars_emp.fromDate ? cars_emp.fromDate|date('Y-m-d') : '' }}</td>
             </tr>
-        </tbody>
+        </tbody>zz
     </table>
 
-    <a href="{{ path('app_cars_emp_index') }}">back to list</a>
+    <a href="{{ path('app_cars_emp_switchCars') }}">back to list</a>
 
     <a href="{{ path('app_cars_emp_edit', {'id': cars_emp.id}) }}">edit</a>
 

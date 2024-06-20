@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Department;
 use App\Form\DepartmentType;
 use App\Repository\DepartmentRepository;
+use App\Repository\EmployeeRepository;
+use App\Repository\TitleRepository;
 use Doctrine\DBAL\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +20,15 @@ class DepartmentController extends AbstractController
      * @throws Exception
      */
     #[Route('/', name: 'app_department_index', methods: ['GET'])]
-    public function index(DepartmentRepository $departmentRepository): Response
+    public function index(EmployeeRepository $employeeRepository, DepartmentRepository $departmentRepository, TitleRepository $titleRepository): Response
     {
+       // dump($this->getUser());
+        if ($this->getUser()?->getId() !== null) {
+            //dd($departmentRepository->find($employeeRepository->getCurrentDepartment($this->getUser()?->getId())));
+            if ($this->getUser()?->setCurrent($this->getUser()?->getCurrentAffectation()->getDepartment())) {
+                $this->getUser()?->setCurrentTitle($titleRepository->find($employeeRepository->getCurrentTitle($this->getUser()?->getId())));
+            }
+        }
 
 
         return $this->render('department/index.html.twig', [
@@ -55,7 +64,7 @@ class DepartmentController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/{id}', name: 'app_department_show', methods: ['GET'])]
+    #[Route('/{dept_no}', name: 'app_department_show', methods: ['GET'])]
     public function show(Department $department, DepartmentRepository $departmentRepository): Response
     {
         return $this->render('department/show.html.twig', [

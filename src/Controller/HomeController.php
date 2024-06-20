@@ -20,8 +20,9 @@ class HomeController extends AbstractController
        // dump($this->getUser());
         if ($this->getUser()?->getId() !== null)
         {
-            if($this->getUser()->setCurrent($departmentRepository->find($employeeRepository->getCurrentDepartment($this->getUser()?->getId())))){
-                $this->getUser()->setCurrentTitle($titleRepository->find($employeeRepository->getCurrentTitle($this->getUser()?->getId())));
+            //dd($departmentRepository->find($employeeRepository->getCurrentDepartment($this->getUser()?->getId())));
+            if($this->getUser()?->setCurrent($this->getUser()?->getCurrentAffectation()->getDepartment())) {
+                $this->getUser()?->setCurrentTitle($titleRepository->find($employeeRepository->getCurrentTitle($this->getUser()?->getId())));
             }
         }
         //dd($this->getUser());

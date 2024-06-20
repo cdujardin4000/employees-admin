@@ -354,19 +354,9 @@ class Employee  implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->affectations;
     }
 
-    public function getCurrentAffectation(): Collection
+    public function getCurrentAffectation(): DeptEmp
     {
-        $collection = $this->affectations;
-        $unlimited = new DateTime('9999-01-01 00:00:00.0');
-
-        $expr = new Comparison('to_date', '=', $unlimited);
-
-
-        $criteria = new Criteria();
-
-        $criteria->where($expr);
-
-        return $collection->matching($criteria);
+        return $this->affectations->last();
     }
 
     /**

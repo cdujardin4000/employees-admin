@@ -23,6 +23,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
@@ -188,11 +189,11 @@ class EmployeeCrudController extends AbstractCrudController
             ->setUploadedFileNamePattern(self::EMPLOYEE_PATH.'photos/[slug]-[timestamp].[extension]');
 
 
-        /**yield AvatarField::new('avatar')
+       yield AvatarField::new('avatar')
             ->formatValue(static function ($value, Employee $employee) {
                 return $employee?->getAvatar();
             })
-            ->hideOnForm();**/
+            ->hideOnForm();
 
         yield ImageField::new('avatarUrl')
             ->formatValue(static function ($value, ?Employee $user) {
